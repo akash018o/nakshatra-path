@@ -71,3 +71,44 @@ create policy "authenticated can update reviews"
   on reviews for update
   to authenticated
   using (true);
+
+-- Gemstone images: lets the site owner upload a real photo per stone from
+-- the admin panel, no code changes or redeploy needed. Falls back to the
+-- built-in SVG icon on the public site until an image is set.
+insert into storage.buckets (id, name, public)
+values ('gemstones', 'gemstones', true)
+on conflict (id) do nothing;
+
+create policy "public can view gemstone images"
+  on storage.objects for select
+  to public
+  using (bucket_id = 'gemstones');
+
+create policy "authenticated can upload gemstone images"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'gemstones');
+
+create policy "authenticated can update gemstone images"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'gemstones');
+
+create table if not exists gemstone_images (
+  id text primary key,        -- matches the stone id in src/data/gemstones.js, e.g. 'ruby'
+  image_url text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table gemstone_images enable row level security;
+
+create policy "public can read gemstone image urls"
+  on gemstone_images for select
+  to public
+  using (true);
+
+create policy "authenticated can manage gemstone image urls"
+  on gemstone_images for all
+  to authenticated
+  using (true)
+  with check (true);

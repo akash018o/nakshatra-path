@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
+import { gemstones } from "../data/gemstones";
+import { fetchGemstoneImages, uploadGemstoneImage } from "../lib/gemstoneImages";
+import GemIcon from "../components/GemIcon";
 
 const STATUS_OPTIONS = ["new", "contacted", "closed"];
 const REVIEW_STATUS_OPTIONS = ["pending", "approved", "rejected"];
@@ -8,6 +11,8 @@ export default function Admin() {
   const [tab, setTab] = useState("bookings");
   const [bookings, setBookings] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [gemImages, setGemImages] = useState({});
+  const [uploadingId, setUploadingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
@@ -18,13 +23,15 @@ export default function Admin() {
 
   async function load() {
     setLoading(true);
-    const [b, r] = await Promise.all([
+    const [b, r, imgs] = await Promise.all([
       supabase.from("bookings").select("*").order("created_at", { ascending: false }),
       supabase.from("reviews").select("*").order("created_at", { ascending: false }),
+      fetchGemstoneImages().catch(() => ({})),
     ]);
     if (b.error) setError(b.error.message);
     else setBookings(b.data || []);
     if (!r.error) setReviews(r.data || []);
+    setGemImages(imgs);
     setLoading(false);
   }
 
@@ -36,6 +43,19 @@ export default function Admin() {
   async function updateReviewStatus(id, status) {
     setReviews((r) => r.map((x) => (x.id === id ? { ...x, status } : x)));
     await supabase.from("reviews").update({ status }).eq("id", id);
+  }
+
+  async function handleImageUpload(stoneId, file) {
+    setUploadingId(stoneId);
+    try {
+      const url = await uploadGemstoneImage(stoneId, file);
+      setGemImages((prev) => ({ ...prev, [stoneId]: url }));
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed: " + err.message);
+    } finally {
+      setUploadingId(null);
+    }
   }
 
   const visible =
@@ -54,7 +74,7 @@ export default function Admin() {
         </p>
       )}
 
-      <div className="mt-6 flex gap-2 text-sm">
+      <div className="mt-6 flex flex-wrap gap-2 text-sm">
         <button
           onClick={() => setTab("bookings")}
           className={`border px-4 py-2 ${tab === "bookings" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
@@ -66,6 +86,12 @@ export default function Admin() {
           className={`border px-4 py-2 ${tab === "reviews" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
         >
           Reviews ({reviews.filter((r) => r.status === "pending").length} pending)
+        </button>
+        <button
+          onClick={() => setTab("gemstones")}
+          className={`border px-4 py-2 ${tab === "gemstones" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
+        >
+          Gemstone photos
         </button>
       </div>
 
@@ -144,7 +170,7 @@ export default function Admin() {
             </div>
           )}
         </>
-      ) : (
+      ) : tab === "reviews" ? (
         <div className="mt-8 space-y-4">
           {reviews.length === 0 ? (
             <p className="text-parchment/50">No reviews yet.</p>
@@ -170,6 +196,44 @@ export default function Admin() {
               </div>
             ))
           )}
+        </div>
+      ) : (
+        <div className="mt-8">
+          <p className="mb-6 max-w-lg text-sm text-parchment/60">
+            Upload a real photo for any stone below — it replaces the placeholder icon
+            on the site immediately, no code changes needed. JPG or PNG, ideally a
+            square close-up shot on a plain background.
+          </p>
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
+            {gemstones.map((g) => (
+              <div key={g.id} className="border border-brass/15 p-4 text-center">
+                {gemImages[g.id] ? (
+                  <img
+                    src={gemImages[g.id]}
+                    alt={g.name}
+                    className="mx-auto mb-3 h-20 w-20 rounded-full border border-brass/40 object-cover"
+                  />
+                ) : (
+                  <GemIcon stoneId={g.id} className="mx-auto mb-3 h-16 w-16" />
+                )}
+                <p className="text-sm text-parchment">{g.name}</p>
+                <label className="mt-3 block cursor-pointer border border-brass/30 px-3 py-1.5 text-xs text-brass hover:bg-brass hover:text-cosmos">
+                  {uploadingId === g.id ? "Uploading..." : gemImages[g.id] ? "Replace photo" : "Upload photo"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={uploadingId === g.id}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageUpload(g.id, file);
+                      e.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

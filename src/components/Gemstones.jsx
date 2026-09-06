@@ -1,7 +1,15 @@
+import { useEffect, useState } from "react";
 import { gemstones } from "../data/gemstones";
+import { fetchGemstoneImages } from "../lib/gemstoneImages";
 import GemIcon from "./GemIcon";
 
 export default function Gemstones({ onInquire }) {
+  const [images, setImages] = useState({});
+
+  useEffect(() => {
+    fetchGemstoneImages().then(setImages).catch(() => {});
+  }, []);
+
   return (
     <section id="gemstones" className="bg-surface px-6 py-24 md:px-12">
       <div className="mx-auto max-w-5xl">
@@ -17,9 +25,9 @@ export default function Gemstones({ onInquire }) {
               onClick={() => onInquire(g)}
               className="group flex flex-col items-start border border-brass/15 p-4 text-left transition-colors hover:border-brass/50"
             >
-              {g.image ? (
+              {images[g.id] ? (
                 <img
-                  src={g.image}
+                  src={images[g.id]}
                   alt={g.name}
                   className="mb-3 h-16 w-16 rounded-full border border-brass/40 object-cover"
                 />

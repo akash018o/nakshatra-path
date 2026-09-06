@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { submitBooking } from "../lib/bookings";
+import { buildBookingWhatsAppLink } from "../lib/whatsapp";
 
 const inputClass =
   "w-full border-b border-brass/30 bg-transparent py-2 text-parchment placeholder:text-parchment/30 focus:border-brass outline-none";
@@ -51,9 +52,17 @@ export default function BookingModal({ service, onClose }) {
               Your details have been received. The astrologer will reach out based on
               the option you chose.
             </p>
+            <a
+              href={buildBookingWhatsAppLink({ ...form, service: service.name })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 block bg-kumkum py-3 text-sm text-parchment transition-colors hover:bg-kumkumLight"
+            >
+              Also send via WhatsApp
+            </a>
             <button
               onClick={onClose}
-              className="mt-6 border border-brass px-6 py-2 text-sm text-brass hover:bg-brass hover:text-cosmos"
+              className="mt-3 w-full border border-brass px-6 py-2 text-sm text-brass hover:bg-brass hover:text-cosmos"
             >
               Done
             </button>
