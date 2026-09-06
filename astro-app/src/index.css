@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Work+Sans:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background-color: #0D1321;
+  color: #EDE6D6;
+  font-family: 'Work Sans', sans-serif;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.font-display { font-family: 'Marcellus', serif; }
+
+::selection {
+  background: #8B2635;
+  color: #EDE6D6;
+}
+
+:focus-visible {
+  outline: 2px solid #C89B3C;
+  outline-offset: 2px;
+}
