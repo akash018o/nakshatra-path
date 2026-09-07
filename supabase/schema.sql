@@ -1,4 +1,4 @@
--- Run this in Supabase SQL editor once, before going live.
+-- Run this in Supabase SQL editor once, before going live.ok
 
 create table if not exists bookings (
   id uuid primary key default gen_random_uuid(),
