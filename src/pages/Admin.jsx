@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { gemstones } from "../data/gemstones";
 import { fetchGemstoneImages, uploadGemstoneImage } from "../lib/gemstoneImages";
+import { getSession, onAuthChange, signOut } from "../lib/auth";
 import GemIcon from "../components/GemIcon";
+import AdminLogin from "../components/AdminLogin";
 
 const STATUS_OPTIONS = ["new", "contacted", "closed"];
 const REVIEW_STATUS_OPTIONS = ["pending", "approved", "rejected"];
 
 export default function Admin() {
+  const [session, setSession] = useState(undefined); // undefined = still checking, null = logged out
   const [tab, setTab] = useState("bookings");
   const [bookings, setBookings] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -16,10 +19,17 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    load();
+    getSession().then(setSession);
+    const unsubscribe = onAuthChange(setSession);
+    return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (session) load();
+  }, [session]);
 
   async function load() {
     setLoading(true);
@@ -40,9 +50,21 @@ export default function Admin() {
     await supabase.from("bookings").update({ status }).eq("id", id);
   }
 
+  async function deleteBooking(id) {
+    if (!confirm("Delete this booking permanently?")) return;
+    setBookings((b) => b.filter((x) => x.id !== id));
+    await supabase.from("bookings").delete().eq("id", id);
+  }
+
   async function updateReviewStatus(id, status) {
     setReviews((r) => r.map((x) => (x.id === id ? { ...x, status } : x)));
     await supabase.from("reviews").update({ status }).eq("id", id);
+  }
+
+  async function deleteReview(id) {
+    if (!confirm("Delete this review permanently?")) return;
+    setReviews((r) => r.filter((x) => x.id !== id));
+    await supabase.from("reviews").delete().eq("id", id);
   }
 
   async function handleImageUpload(stoneId, file) {
@@ -58,14 +80,51 @@ export default function Admin() {
     }
   }
 
-  const visible =
-    filter === "all" ? bookings : bookings.filter((b) => b.service === filter);
+  function exportBookingsCSV() {
+    const headers = ["Name", "Phone", "Service", "DOB", "Time of birth", "Place of birth", "Prefers", "Notes", "Status", "Received"];
+    const rows = bookings.map((b) => [
+      b.name, b.phone, b.service, b.dob, b.time_of_birth || "", b.place_of_birth || "",
+      b.contact_preference, (b.notes || "").replace(/\n/g, " "), b.status, b.created_at,
+    ]);
+    const csv = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
+  if (session === undefined) {
+    return <div className="flex min-h-screen items-center justify-center bg-cosmos text-parchment/50">Loading...</div>;
+  }
+  if (!session) {
+    return <AdminLogin />;
+  }
+
+  const searched = search.trim()
+    ? bookings.filter(
+        (b) =>
+          b.name?.toLowerCase().includes(search.toLowerCase()) ||
+          b.phone?.toLowerCase().includes(search.toLowerCase())
+      )
+    : bookings;
+  const visible = filter === "all" ? searched : searched.filter((b) => b.service === filter);
   const serviceNames = [...new Set(bookings.map((b) => b.service))];
+  const newCount = bookings.filter((b) => b.status === "new").length;
+  const pendingReviews = reviews.filter((r) => r.status === "pending").length;
 
   return (
     <div className="min-h-screen bg-cosmos px-6 py-10 font-body text-parchment md:px-12">
-      <h1 className="font-display text-3xl">Admin</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-3xl">Admin</h1>
+        <button onClick={signOut} className="text-sm text-parchment/50 hover:text-brass">
+          Log out
+        </button>
+      </div>
 
       {!isSupabaseConfigured && (
         <p className="mt-4 border border-brass bg-brass/10 p-3 text-sm text-brassLight">
@@ -73,6 +132,22 @@ export default function Admin() {
           your project's URL and anon key.
         </p>
       )}
+
+      {/* Stats bar */}
+      <div className="mt-6 grid grid-cols-3 gap-4 sm:max-w-md">
+        <div className="border border-brass/15 p-3 text-center">
+          <p className="font-display text-2xl text-brassLight">{bookings.length}</p>
+          <p className="text-xs text-parchment/50">Total bookings</p>
+        </div>
+        <div className="border border-brass/15 p-3 text-center">
+          <p className="font-display text-2xl text-brassLight">{newCount}</p>
+          <p className="text-xs text-parchment/50">New</p>
+        </div>
+        <div className="border border-brass/15 p-3 text-center">
+          <p className="font-display text-2xl text-brassLight">{pendingReviews}</p>
+          <p className="text-xs text-parchment/50">Pending reviews</p>
+        </div>
+      </div>
 
       <div className="mt-6 flex flex-wrap gap-2 text-sm">
         <button
@@ -85,7 +160,7 @@ export default function Admin() {
           onClick={() => setTab("reviews")}
           className={`border px-4 py-2 ${tab === "reviews" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
         >
-          Reviews ({reviews.filter((r) => r.status === "pending").length} pending)
+          Reviews ({pendingReviews} pending)
         </button>
         <button
           onClick={() => setTab("gemstones")}
@@ -106,7 +181,23 @@ export default function Admin() {
         <p className="mt-8 text-parchment/50">Loading...</p>
       ) : tab === "bookings" ? (
         <>
-          <div className="mt-6 flex flex-wrap gap-2 text-sm">
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <input
+              placeholder="Search by name or phone..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border border-brass/30 bg-surface px-3 py-1.5 text-sm text-parchment placeholder:text-parchment/30 outline-none focus:border-brass"
+            />
+            <button
+              onClick={exportBookingsCSV}
+              disabled={bookings.length === 0}
+              className="border border-brass/40 px-3 py-1.5 text-sm text-brass hover:bg-brass hover:text-cosmos disabled:opacity-40"
+            >
+              Export CSV
+            </button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2 text-sm">
             <button
               onClick={() => setFilter("all")}
               className={`border px-3 py-1 ${filter === "all" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
@@ -125,10 +216,10 @@ export default function Admin() {
           </div>
 
           {visible.length === 0 ? (
-            <p className="mt-8 text-parchment/50">No requests yet.</p>
+            <p className="mt-8 text-parchment/50">No requests found.</p>
           ) : (
             <div className="mt-8 overflow-x-auto">
-              <table className="w-full min-w-[720px] text-left text-sm">
+              <table className="w-full min-w-[800px] text-left text-sm">
                 <thead>
                   <tr className="border-b border-brass/20 text-dusk">
                     <th className="py-2 pr-4">Name</th>
@@ -138,6 +229,7 @@ export default function Admin() {
                     <th className="py-2 pr-4">Prefers</th>
                     <th className="py-2 pr-4">Notes</th>
                     <th className="py-2 pr-4">Status</th>
+                    <th className="py-2 pr-4"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -163,6 +255,11 @@ export default function Admin() {
                           ))}
                         </select>
                       </td>
+                      <td className="py-3 pr-4">
+                        <button onClick={() => deleteBooking(b.id)} className="text-xs text-kumkumLight hover:underline">
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -182,15 +279,20 @@ export default function Admin() {
                     <p className="font-display text-lg text-parchment">{r.name}</p>
                     <p className="text-xs text-dusk">{r.email} · {r.rating}★</p>
                   </div>
-                  <select
-                    value={r.status}
-                    onChange={(e) => updateReviewStatus(r.id, e.target.value)}
-                    className="border border-brass/30 bg-surface px-2 py-1 text-sm text-parchment"
-                  >
-                    {REVIEW_STATUS_OPTIONS.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
+                  <div className="flex items-center gap-3">
+                    <select
+                      value={r.status}
+                      onChange={(e) => updateReviewStatus(r.id, e.target.value)}
+                      className="border border-brass/30 bg-surface px-2 py-1 text-sm text-parchment"
+                    >
+                      {REVIEW_STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                    <button onClick={() => deleteReview(r.id)} className="text-xs text-kumkumLight hover:underline">
+                      Delete
+                    </button>
+                  </div>
                 </div>
                 <p className="mt-3 text-sm text-parchment/70">{r.message}</p>
               </div>

@@ -112,3 +112,15 @@ create policy "authenticated can manage gemstone image urls"
   to authenticated
   using (true)
   with check (true);
+
+-- Delete permissions for the admin panel's Delete buttons (added later —
+-- safe to run this whole file again even if earlier parts already exist).
+create policy "authenticated can delete bookings"
+  on bookings for delete
+  to authenticated
+  using (true);
+
+create policy "authenticated can delete reviews"
+  on reviews for delete
+  to authenticated
+  using (true);
