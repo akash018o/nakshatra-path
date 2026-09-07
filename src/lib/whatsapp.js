@@ -2,7 +2,7 @@
 // number — used both on the Contact page and as a "send via WhatsApp"
 // follow-up after a booking is saved, since the Cloud API's silent
 // server-to-owner send needs Meta Business approval we're skipping for now.
-const OWNER_WHATSAPP_NUMBER = "91XXXXXXXXXX"; // TODO: confirm this is the real number, country code, no + or spaces
+const OWNER_WHATSAPP_NUMBER = "918630352867"; // TODO: confirm this is the real number, country code, no + or spaces
 
 export function buildWhatsAppLink(message = "Hi, I'd like to know more about your services.") {
   const encoded = encodeURIComponent(message);
