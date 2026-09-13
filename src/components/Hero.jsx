@@ -14,28 +14,30 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
-      {/* Ambient nebula wash behind everything, for depth instead of flat black */}
+      {/* Warm ambient wash across the whole hero, so the wheel emerges from
+          the same atmosphere instead of sitting on a differently-toned background */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(166,41,61,0.18) 0%, rgba(13,19,33,0) 60%), " +
-            "radial-gradient(ellipse 60% 50% at 80% 80%, rgba(217,167,59,0.10) 0%, rgba(13,19,33,0) 60%)",
+            "radial-gradient(ellipse 90% 70% at 50% 35%, rgba(183,48,42,0.22) 0%, rgba(21,13,10,0) 65%), " +
+            "radial-gradient(ellipse 70% 60% at 50% 35%, rgba(217,167,59,0.14) 0%, rgba(21,13,10,0) 60%)",
         }}
       />
 
       <div className="relative z-10 max-w-2xl">
         <p className="mb-4 text-sm text-brass/80">Vedic astrology &amp; remedies</p>
 
-        {/* Wheel sits as a compact glowing accent right behind the tagline only */}
-        <div className="relative mx-auto flex h-40 w-40 items-center justify-center md:h-52 md:w-52">
-          <div
-            className="absolute inset-[-25%] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(217,167,59,0.45) 0%, rgba(217,167,59,0) 70%)" }}
-          />
+        {/* Wheel as a proper hero visual, edges feathered to melt into the
+            page background instead of showing a hard circular cutout */}
+        <div className="relative mx-auto -mt-2 mb-2 h-64 w-64 md:h-80 md:w-80">
           <video
             ref={videoRef}
-            className="relative h-full w-full rounded-full object-cover drop-shadow-[0_0_25px_rgba(217,167,59,0.35)]"
+            className="h-full w-full object-cover"
+            style={{
+              maskImage: "radial-gradient(circle, black 55%, transparent 78%)",
+              WebkitMaskImage: "radial-gradient(circle, black 55%, transparent 78%)",
+            }}
             autoPlay
             loop
             muted
@@ -48,7 +50,7 @@ export default function Hero() {
           </video>
         </div>
 
-        <h1 className="mt-6 font-display text-4xl leading-tight text-parchment md:text-6xl">
+        <h1 className="mt-2 font-display text-4xl leading-tight text-parchment md:text-6xl">
           Your chart already has the answer.
         </h1>
         <p className="mx-auto mt-6 max-w-md text-parchment/70">

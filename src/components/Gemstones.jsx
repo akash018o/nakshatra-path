@@ -25,7 +25,7 @@ export default function Gemstones({ onInquire }) {
         />
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(to bottom, rgba(27,35,51,0.15) 0%, #1B2333 100%)" }}
+          style={{ background: "linear-gradient(to bottom, rgba(36,25,20,0.15) 0%, #241914 100%)" }}
         />
         <style>{`
           @keyframes gem-breathe {

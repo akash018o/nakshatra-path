@@ -8,7 +8,7 @@
 html, body, #root {
   margin: 0;
   padding: 0;
-  background-color: #0D1321;
+  background-color: #150D0A;
   color: #EDE6D6;
   font-family: 'Work Sans', sans-serif;
   scroll-behavior: smooth;
@@ -21,12 +21,12 @@ html, body, #root {
 .font-display { font-family: 'Marcellus', serif; }
 
 ::selection {
-  background: #8B2635;
+  background: #B7302A;
   color: #EDE6D6;
 }
 
 :focus-visible {
-  outline: 2px solid #C89B3C;
+  outline: 2px solid #D9A73B;
   outline-offset: 2px;
 }
 
@@ -37,11 +37,11 @@ html, body, #root {
 }
 .card-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(217, 167, 59, 0.25);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(217, 167, 59, 0.25);
 }
 
 /* Subtle gradient panel instead of a flat single-color fill, for surfaces
    that should read as slightly raised/rich rather than a flat paint fill. */
 .panel-gradient {
-  background: linear-gradient(160deg, #232C40 0%, #1B2333 100%);
+  background: linear-gradient(160deg, #301F17 0%, #241914 100%);
 }
