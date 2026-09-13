@@ -1,11 +1,9 @@
 import { services } from "../data/services";
-import NakshatraWheel from "./NakshatraWheel";
 
 export default function Services({ onBook }) {
   return (
-    <section id="services" className="relative overflow-hidden px-6 py-24 md:px-12">
-      <NakshatraWheel className="pointer-events-none absolute -right-40 -top-40 h-[600px] w-[600px] opacity-40 md:-right-20 md:-top-20" />
-      <div className="relative mx-auto max-w-5xl">
+    <section id="services" className="px-6 py-24 md:px-12">
+      <div className="mx-auto max-w-5xl">
         <h2 className="font-display text-3xl text-parchment md:text-4xl">Services</h2>
         <p className="mt-3 max-w-md text-parchment/60">
           Choose what you need help with. Every request goes straight to the astrologer.
