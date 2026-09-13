@@ -8,10 +8,17 @@ export default function Services({ onBook }) {
       {/* Faded altar-scene backdrop, built into the section rather than a
           separate banner — reinforces the tradition without competing with
           the card content on top of it */}
-      <img src={altarScene} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-[0.14]" />
+      <img src={altarScene} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.4) 0%, rgba(23,13,8,0.92) 100%)" }}
+        style={{
+          background: "linear-gradient(160deg, rgba(242,129,29,0.4) 0%, rgba(196,30,46,0.3) 100%)",
+          mixBlendMode: "multiply",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.25) 0%, rgba(23,13,8,0.85) 100%)" }}
       />
 
       <div className="relative mx-auto max-w-5xl">

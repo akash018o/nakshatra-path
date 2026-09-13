@@ -21,7 +21,7 @@ export default function Hero() {
         src={milkyway}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover opacity-45"
+        className="absolute inset-0 h-full w-full object-cover opacity-70"
       />
 
       {/* The wheel video, also full-bleed, screen-blended so its own dark
@@ -29,7 +29,7 @@ export default function Hero() {
           wheel and sparkle highlights actually show through */}
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover opacity-90"
+        className="absolute inset-0 h-full w-full object-cover"
         style={{ mixBlendMode: "screen" }}
         autoPlay
         loop
@@ -42,23 +42,33 @@ export default function Hero() {
         <source src={zodiacVideo} type="video/mp4" />
       </video>
 
-      {/* Bhagwa wash tying the photo + video together, and a dark vignette
-          so the headline stays legible over all of it */}
+      {/* Saffron/red tint over the photo — warms it toward bhagwa rather
+          than just dimming it, using multiply so the photo's own detail
+          and brightness still comes through */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: "linear-gradient(160deg, rgba(242,129,29,0.45) 0%, rgba(196,30,46,0.35) 100%)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Light vignette, only for text contrast — not a blanket dark wash */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 120% 90% at 50% 45%, rgba(242,129,29,0.32) 0%, rgba(23,13,8,0.55) 55%, rgba(23,13,8,0.92) 100%), " +
-            "radial-gradient(ellipse 70% 60% at 50% 30%, rgba(196,30,46,0.22) 0%, rgba(23,13,8,0) 60%)",
+            "radial-gradient(ellipse 65% 55% at 50% 45%, rgba(23,13,8,0.55) 0%, rgba(23,13,8,0) 70%), " +
+            "linear-gradient(180deg, rgba(23,13,8,0.15) 0%, rgba(23,13,8,0.55) 100%)",
         }}
       />
 
       <div className="relative z-10 max-w-2xl">
         <p className="mb-4 text-sm text-saffronLight">Vedic astrology &amp; remedies</p>
-        <h1 className="font-display text-4xl leading-tight text-parchment md:text-6xl">
+        <h1 className="font-display text-4xl leading-tight text-parchment drop-shadow-[0_2px_12px_rgba(23,13,8,0.8)] md:text-6xl">
           Your chart already has the answer.
         </h1>
-        <p className="mx-auto mt-6 max-w-md text-parchment/70">
+        <p className="mx-auto mt-6 max-w-md text-parchment/90 drop-shadow-[0_1px_6px_rgba(23,13,8,0.8)]">
           Kundali readings, remedies, and gemstone guidance — grounded in your actual
           birth chart, not a horoscope column.
         </p>
