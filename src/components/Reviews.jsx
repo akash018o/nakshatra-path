@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { submitReview, fetchApprovedReviews } from "../lib/reviews";
+import tarotDesk from "../assets/tarot-desk.webp";
 
 function Stars({ value, onChange }) {
   return (
@@ -47,8 +48,14 @@ export default function Reviews() {
   };
 
   return (
-    <section id="reviews" className="bg-surface px-6 py-24 md:px-12">
-      <div className="mx-auto max-w-3xl">
+    <section id="reviews" className="relative overflow-hidden bg-surface px-6 py-24 md:px-12">
+      <img src={tarotDesk} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-[0.13]" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "linear-gradient(180deg, rgba(43,24,16,0.5) 0%, rgba(43,24,16,0.95) 100%)" }}
+      />
+
+      <div className="relative mx-auto max-w-3xl">
         <h2 className="font-display text-3xl text-parchment md:text-4xl">
           From people we've helped
         </h2>

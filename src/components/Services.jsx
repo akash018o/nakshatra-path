@@ -1,10 +1,20 @@
 import { services } from "../data/services";
 import Reveal from "./Reveal";
+import altarScene from "../assets/altar-scene.webp";
 
 export default function Services({ onBook }) {
   return (
-    <section id="services" className="px-6 py-24 md:px-12">
-      <div className="mx-auto max-w-5xl">
+    <section id="services" className="relative overflow-hidden px-6 py-24 md:px-12">
+      {/* Faded altar-scene backdrop, built into the section rather than a
+          separate banner — reinforces the tradition without competing with
+          the card content on top of it */}
+      <img src={altarScene} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-[0.14]" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.4) 0%, rgba(23,13,8,0.92) 100%)" }}
+      />
+
+      <div className="relative mx-auto max-w-5xl">
         <Reveal>
           <h2 className="font-display text-3xl text-parchment md:text-4xl">Services</h2>
           <p className="mt-3 max-w-md text-parchment/60">

@@ -7,6 +7,7 @@ import Reviews from "../components/Reviews";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import BookingModal from "../components/BookingModal";
+import FloatingContact from "../components/FloatingContact";
 
 export default function Home() {
   const [activeService, setActiveService] = useState(null);
@@ -30,6 +31,7 @@ export default function Home() {
       <Footer />
 
       <BookingModal service={activeService} onClose={() => setActiveService(null)} />
+      <FloatingContact />
     </div>
   );
 }
