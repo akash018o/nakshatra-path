@@ -4,15 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        cosmos: "#0D1321",
+        cosmos: "#0B0F1C",
         surface: "#1B2333",
-        surface2: "#232C40",
-        kumkum: "#8B2635",
-        kumkumLight: "#A83B4A",
-        brass: "#C89B3C",
-        brassLight: "#DDBD6E",
+        surface2: "#262F47",
+        kumkum: "#A6293D",
+        kumkumLight: "#C2415A",
+        brass: "#D9A73B",
+        brassLight: "#F2CA6D",
         parchment: "#EDE6D6",
-        dusk: "#3A5A6B",
+        dusk: "#4A7089",
       },
       fontFamily: {
         display: ["Marcellus", "serif"],

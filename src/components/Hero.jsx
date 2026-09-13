@@ -1,6 +1,17 @@
-import zodiacWheel from "../assets/zodiac-wheel.webp";
+import { useEffect, useRef } from "react";
+import zodiacVideo from "../assets/zodiac-wheel.mp4";
+import zodiacPoster from "../assets/zodiac-wheel-poster.webp";
 
 export default function Hero() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion && videoRef.current) {
+      videoRef.current.pause();
+    }
+  }, []);
+
   return (
     <section className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
       {/* Ambient nebula wash behind everything, for depth instead of flat black */}
@@ -8,27 +19,33 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(139,38,53,0.18) 0%, rgba(13,19,33,0) 60%), " +
-            "radial-gradient(ellipse 60% 50% at 80% 80%, rgba(200,155,60,0.10) 0%, rgba(13,19,33,0) 60%)",
+            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(166,41,61,0.18) 0%, rgba(13,19,33,0) 60%), " +
+            "radial-gradient(ellipse 60% 50% at 80% 80%, rgba(217,167,59,0.10) 0%, rgba(13,19,33,0) 60%)",
         }}
       />
 
       <div className="relative z-10 max-w-2xl">
         <p className="mb-4 text-sm text-brass/80">Vedic astrology &amp; remedies</p>
 
-        {/* Wheel sits as a compact glowing accent right behind the tagline only, not the whole hero */}
+        {/* Wheel sits as a compact glowing accent right behind the tagline only */}
         <div className="relative mx-auto flex h-40 w-40 items-center justify-center md:h-52 md:w-52">
           <div
             className="absolute inset-[-25%] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(200,155,60,0.45) 0%, rgba(200,155,60,0) 70%)" }}
+            style={{ background: "radial-gradient(circle, rgba(217,167,59,0.45) 0%, rgba(217,167,59,0) 70%)" }}
           />
-          <img
-            src={zodiacWheel}
-            alt=""
+          <video
+            ref={videoRef}
+            className="relative h-full w-full rounded-full object-cover drop-shadow-[0_0_25px_rgba(217,167,59,0.35)]"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster={zodiacPoster}
             aria-hidden="true"
-            className="relative h-full w-full object-contain drop-shadow-[0_0_25px_rgba(200,155,60,0.35)]"
-            style={{ animation: "spin-slow 90s linear infinite" }}
-          />
+          >
+            <source src={zodiacVideo} type="video/mp4" />
+          </video>
         </div>
 
         <h1 className="mt-6 font-display text-4xl leading-tight text-parchment md:text-6xl">
@@ -45,11 +62,6 @@ export default function Hero() {
           See services
         </a>
       </div>
-
-      <style>{`
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
-      `}</style>
     </section>
   );
 }

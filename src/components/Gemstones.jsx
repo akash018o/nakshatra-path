@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { gemstones } from "../data/gemstones";
 import { fetchGemstoneImages } from "../lib/gemstoneImages";
 import GemIcon from "./GemIcon";
+import Reveal from "./Reveal";
 import gemstoneCluster from "../assets/gemstone-cluster.webp";
 
 export default function Gemstones({ onInquire }) {
@@ -42,25 +43,26 @@ export default function Gemstones({ onInquire }) {
           </p>
 
           <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
-            {gemstones.map((g) => (
-              <button
-                key={g.id}
-                onClick={() => onInquire(g)}
-                className="card-lift group flex flex-col items-start border border-brass/15 panel-gradient p-4 text-left"
-              >
-                {images[g.id] ? (
-                  <img
-                    src={images[g.id]}
-                    alt={g.name}
-                    className="mb-3 h-16 w-16 rounded-full border border-brass/40 object-cover"
-                  />
-                ) : (
-                  <GemIcon stoneId={g.id} className="mb-3 h-14 w-14" />
-                )}
-                <p className="font-display text-base text-parchment">{g.name}</p>
-                <p className="mt-1 text-xs text-dusk">{g.planet}</p>
-                <p className="mt-2 text-xs text-parchment/60">{g.benefit}</p>
-              </button>
+            {gemstones.map((g, i) => (
+              <Reveal key={g.id} delay={i * 40}>
+                <button
+                  onClick={() => onInquire(g)}
+                  className="card-lift group flex w-full flex-col items-start border border-brass/15 panel-gradient p-4 text-left"
+                >
+                  {images[g.id] ? (
+                    <img
+                      src={images[g.id]}
+                      alt={g.name}
+                      className="mb-3 h-16 w-16 rounded-full border border-brass/40 object-cover"
+                    />
+                  ) : (
+                    <GemIcon stoneId={g.id} className="mb-3 h-14 w-14" />
+                  )}
+                  <p className="font-display text-base text-parchment">{g.name}</p>
+                  <p className="mt-1 text-xs text-dusk">{g.planet}</p>
+                  <p className="mt-2 text-xs text-parchment/60">{g.benefit}</p>
+                </button>
+              </Reveal>
             ))}
           </div>
         </div>

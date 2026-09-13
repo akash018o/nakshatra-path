@@ -37,7 +37,7 @@ html, body, #root {
 }
 .card-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(200, 155, 60, 0.25);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(217, 167, 59, 0.25);
 }
 
 /* Subtle gradient panel instead of a flat single-color fill, for surfaces
