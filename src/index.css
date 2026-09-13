@@ -8,7 +8,7 @@
 html, body, #root {
   margin: 0;
   padding: 0;
-  background-color: #150D0A;
+  background-color: #170D08;
   color: #EDE6D6;
   font-family: 'Work Sans', sans-serif;
   scroll-behavior: smooth;
@@ -17,7 +17,7 @@ html, body, #root {
 /* Subtle repeating mandala texture across the whole site, very low opacity —
    a traditional temple-textile feel without needing a photo. */
 body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23D9A73B' stroke-width='1' opacity='0.05'%3E%3Ccircle cx='60' cy='60' r='26'/%3E%3Ccircle cx='60' cy='60' r='18'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(45 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(90 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(135 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(180 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(225 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(270 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(315 60 60)'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23D9A73B'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23E3A730' stroke-width='1' opacity='0.05'%3E%3Ccircle cx='60' cy='60' r='26'/%3E%3Ccircle cx='60' cy='60' r='18'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(45 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(90 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(135 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(180 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(225 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(270 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(315 60 60)'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23E3A730'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 120px 120px;
 }
@@ -29,12 +29,12 @@ body {
 .font-display { font-family: 'Marcellus', serif; }
 
 ::selection {
-  background: #B7302A;
+  background: #C41E2E;
   color: #EDE6D6;
 }
 
 :focus-visible {
-  outline: 2px solid #D9A73B;
+  outline: 2px solid #E3A730;
   outline-offset: 2px;
 }
 
@@ -45,11 +45,11 @@ body {
 }
 .card-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(217, 167, 59, 0.25);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(227, 167, 48, 0.25);
 }
 
 /* Subtle gradient panel instead of a flat single-color fill, for surfaces
    that should read as slightly raised/rich rather than a flat paint fill. */
 .panel-gradient {
-  background: linear-gradient(160deg, #301F17 0%, #241914 100%);
+  background: linear-gradient(160deg, #3A2013 0%, #2B1810 100%);
 }

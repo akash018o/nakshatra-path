@@ -4,17 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Warm, temple-night palette — no blue channel dominance anywhere,
-        // which is what was reading as "violet" before.
-        cosmos: "#150D0A",     // deep warm near-black (brown-black, not blue-black)
-        surface: "#241914",    // warm dark brown surface
-        surface2: "#301F17",   // slightly lighter warm brown
-        kumkum: "#B7302A",     // true vermillion/sindoor red, no pink/magenta cast
-        kumkumLight: "#D14B3B",
-        brass: "#D9A73B",      // marigold gold
-        brassLight: "#F2CA6D",
-        parchment: "#EDE6D6",  // cream
-        dusk: "#C4915C",       // warm muted amber-tan (replaces the old cool teal)
+        // Bhagwa/saffron-red-gold — the actual traditional Hindu religious
+        // palette (temple flags, tilak, marigold, sindoor), committed to
+        // fully rather than hinted at with dark muted tones.
+        cosmos: "#170D08",       // warm near-black base, still dark enough for text contrast
+        surface: "#2B1810",      // warm dark brown surface
+        surface2: "#3A2013",     // lighter warm brown
+        saffron: "#F2811D",      // bhagwa — the primary religious accent
+        saffronLight: "#FFA94D",
+        kumkum: "#C41E2E",       // vivid sindoor red, no muddy/pink cast
+        kumkumLight: "#E23B4A",
+        brass: "#E3A730",        // marigold gold
+        brassLight: "#F7C85C",
+        parchment: "#FCEFDD",    // warm cream (slightly warmer than before)
+        dusk: "#C4915C",
       },
       fontFamily: {
         display: ["Marcellus", "serif"],

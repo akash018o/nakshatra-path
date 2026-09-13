@@ -13,7 +13,7 @@ function Stars({ value, onChange }) {
           aria-label={`${n} star`}
           className="text-brass"
         >
-          <Star size={20} fill={n <= value ? "#D9A73B" : "none"} strokeWidth={1.5} />
+          <Star size={20} fill={n <= value ? "#E3A730" : "none"} strokeWidth={1.5} />
         </button>
       ))}
     </div>
@@ -62,7 +62,7 @@ export default function Reviews() {
               <div key={r.id} className="border-l-2 border-brass/40 pl-4">
                 <div className="flex gap-1">
                   {Array.from({ length: r.rating }, (_, i) => (
-                    <Star key={i} size={14} fill="#D9A73B" stroke="#D9A73B" />
+                    <Star key={i} size={14} fill="#E3A730" stroke="#E3A730" />
                   ))}
                 </div>
                 <p className="mt-2 text-sm text-parchment/80">{r.message}</p>

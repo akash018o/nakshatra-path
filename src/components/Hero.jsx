@@ -14,31 +14,30 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
-      {/* Warm ambient wash across the whole hero, so the wheel emerges from
-          the same atmosphere instead of sitting on a differently-toned background */}
+      {/* Bold saffron/red/gold temple-fire wash — the actual bhagwa palette,
+          not a hint of it */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 90% 70% at 50% 35%, rgba(183,48,42,0.22) 0%, rgba(21,13,10,0) 65%), " +
-            "radial-gradient(ellipse 70% 60% at 50% 35%, rgba(217,167,59,0.14) 0%, rgba(21,13,10,0) 60%)",
+            "radial-gradient(ellipse 100% 80% at 50% 40%, rgba(242,129,29,0.35) 0%, rgba(23,13,8,0) 68%), " +
+            "radial-gradient(ellipse 80% 65% at 50% 40%, rgba(196,30,46,0.28) 0%, rgba(23,13,8,0) 62%), " +
+            "radial-gradient(ellipse 60% 50% at 50% 30%, rgba(227,167,48,0.25) 0%, rgba(23,13,8,0) 55%)",
         }}
       />
 
       <div className="relative z-10 max-w-2xl">
-        <p className="mb-4 text-sm text-brass/80">Vedic astrology &amp; remedies</p>
+        <p className="mb-4 text-sm text-saffronLight">Vedic astrology &amp; remedies</p>
 
-        {/* Wheel as a proper hero visual, faded into the page rather than a
-            hard sticker — feathered mask + reduced opacity so it reads as
-            part of the atmosphere, not a cutout pasted on top */}
+        {/* Video blended with mix-blend-mode instead of a hard mask/crop —
+            this makes the video's own dark backdrop merge with the page
+            background by luminance (black areas vanish, bright gold/gem
+            highlights glow through), so there's no visible edge at all */}
         <div className="relative mx-auto -mt-2 mb-2 h-64 w-64 md:h-80 md:w-80">
           <video
             ref={videoRef}
-            className="h-full w-full object-cover opacity-80"
-            style={{
-              maskImage: "radial-gradient(circle, black 40%, transparent 72%)",
-              WebkitMaskImage: "radial-gradient(circle, black 40%, transparent 72%)",
-            }}
+            className="h-full w-full object-cover"
+            style={{ mixBlendMode: "screen" }}
             autoPlay
             loop
             muted
@@ -60,7 +59,7 @@ export default function Hero() {
         </p>
         <a
           href="#services"
-          className="mt-8 inline-block bg-gradient-to-r from-brass to-brassLight px-8 py-3 text-sm font-medium tracking-wide text-cosmos shadow-lg shadow-brass/20 transition-transform hover:scale-105"
+          className="mt-8 inline-block bg-gradient-to-r from-saffron via-kumkum to-saffron bg-[length:200%_auto] px-8 py-3 text-sm font-medium tracking-wide text-parchment shadow-lg shadow-kumkum/30 transition-all hover:scale-105 hover:bg-right"
         >
           See services
         </a>
