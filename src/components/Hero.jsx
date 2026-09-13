@@ -28,15 +28,16 @@ export default function Hero() {
       <div className="relative z-10 max-w-2xl">
         <p className="mb-4 text-sm text-brass/80">Vedic astrology &amp; remedies</p>
 
-        {/* Wheel as a proper hero visual, edges feathered to melt into the
-            page background instead of showing a hard circular cutout */}
+        {/* Wheel as a proper hero visual, faded into the page rather than a
+            hard sticker — feathered mask + reduced opacity so it reads as
+            part of the atmosphere, not a cutout pasted on top */}
         <div className="relative mx-auto -mt-2 mb-2 h-64 w-64 md:h-80 md:w-80">
           <video
             ref={videoRef}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover opacity-80"
             style={{
-              maskImage: "radial-gradient(circle, black 55%, transparent 78%)",
-              WebkitMaskImage: "radial-gradient(circle, black 55%, transparent 78%)",
+              maskImage: "radial-gradient(circle, black 40%, transparent 72%)",
+              WebkitMaskImage: "radial-gradient(circle, black 40%, transparent 72%)",
             }}
             autoPlay
             loop
