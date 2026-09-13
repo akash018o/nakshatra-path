@@ -4,12 +4,12 @@ import moonPhases from "../assets/moon-phases.webp";
 export default function Contact() {
   return (
     <section id="contact" className="relative overflow-hidden px-6 py-24 text-center md:px-12">
-      <img src={moonPhases} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-50" />
+      <img src={moonPhases} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-80" />
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background: "linear-gradient(160deg, rgba(242,129,29,0.3) 0%, rgba(196,30,46,0.35) 100%)",
-          mixBlendMode: "multiply",
+          mixBlendMode: "overlay",
         }}
       />
       <div

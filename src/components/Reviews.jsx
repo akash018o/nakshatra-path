@@ -49,12 +49,12 @@ export default function Reviews() {
 
   return (
     <section id="reviews" className="relative overflow-hidden bg-surface px-6 py-24 md:px-12">
-      <img src={tarotDesk} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-55" />
+      <img src={tarotDesk} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-85" />
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background: "linear-gradient(160deg, rgba(242,129,29,0.35) 0%, rgba(196,30,46,0.3) 100%)",
-          mixBlendMode: "multiply",
+          mixBlendMode: "overlay",
         }}
       />
       <div
