@@ -1,9 +1,32 @@
-import KundaliWheel from "./KundaliWheel";
+import zodiacWheel from "../assets/zodiac-wheel.webp";
 
 export default function Hero() {
   return (
     <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden px-6 text-center">
-      <KundaliWheel className="pointer-events-none absolute left-1/2 top-1/2 h-[130vw] w-[130vw] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-70 md:h-[70vh] md:w-[70vh]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[140vw] w-[140vw] max-w-none -translate-x-1/2 -translate-y-1/2 md:h-[85vh] md:w-[85vh]">
+        <img
+          src={zodiacWheel}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-contain opacity-60"
+          style={{ animation: "spin-slow 240s linear infinite" }}
+        />
+      </div>
+
+      {/* Radial vignette so the headline stays legible over the wheel */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(13,19,33,0.35) 0%, rgba(13,19,33,0.75) 55%, rgba(13,19,33,0.95) 100%)",
+        }}
+      />
+
+      <style>{`
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) { img { animation: none !important; } }
+      `}</style>
+
       <div className="relative z-10 max-w-2xl">
         <p className="mb-4 text-sm text-brass/80">Vedic astrology &amp; remedies</p>
         <h1 className="font-display text-4xl leading-tight text-parchment md:text-6xl">
