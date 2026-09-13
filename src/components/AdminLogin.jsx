@@ -23,7 +23,7 @@ export default function AdminLogin() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-cosmos px-6 font-body">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm border border-brass/20 bg-surface p-8">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm border border-brass/20 panel-gradient p-8 shadow-2xl shadow-black/50">
         <h1 className="font-display text-2xl text-parchment">Admin login</h1>
         <p className="mt-1 text-sm text-parchment/50">Nakshatra Path</p>
 

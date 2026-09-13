@@ -15,24 +15,21 @@ export default function Gemstones({ onInquire }) {
     <section id="gemstones" className="bg-surface">
       {/* Full-bleed banner photo, gently breathing, fading into the section below */}
       <div className="relative h-[220px] w-full overflow-hidden md:h-[320px]">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${gemstoneCluster})`,
-            animation: "gem-breathe 18s ease-in-out infinite",
-          }}
+        <img
+          src={gemstoneCluster}
+          alt="A collection of faceted gemstones"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ animation: "gem-breathe 18s ease-in-out infinite" }}
         />
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(to bottom, rgba(27,35,51,0.1) 0%, #1B2333 100%)" }}
+          style={{ background: "linear-gradient(to bottom, rgba(27,35,51,0.15) 0%, #1B2333 100%)" }}
         />
         <style>{`
           @keyframes gem-breathe {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.08); }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            #gemstones div[style*="gem-breathe"] { animation: none !important; }
           }
         `}</style>
       </div>
@@ -49,7 +46,7 @@ export default function Gemstones({ onInquire }) {
               <button
                 key={g.id}
                 onClick={() => onInquire(g)}
-                className="group flex flex-col items-start border border-brass/15 p-4 text-left transition-colors hover:border-brass/50"
+                className="card-lift group flex flex-col items-start border border-brass/15 panel-gradient p-4 text-left"
               >
                 {images[g.id] ? (
                   <img

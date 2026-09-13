@@ -35,8 +35,8 @@ export default function BookingModal({ service, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-cosmos/90 p-4">
-      <div className="relative w-full max-w-md border border-brass/30 bg-surface p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-cosmos/80 p-4 backdrop-blur-sm">
+      <div className="relative w-full max-w-md border border-brass/30 panel-gradient p-8 shadow-2xl shadow-black/50">
         <button
           onClick={onClose}
           aria-label="Close"
@@ -118,7 +118,7 @@ export default function BookingModal({ service, onClose }) {
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="w-full border border-brass py-3 text-sm text-brass transition-colors hover:bg-brass hover:text-cosmos disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-brass to-brassLight py-3 text-sm font-medium text-cosmos shadow-lg shadow-brass/20 transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
               >
                 {status === "sending" ? "Sending..." : "Send request"}
               </button>

@@ -29,3 +29,19 @@ html, body, #root {
   outline: 2px solid #C89B3C;
   outline-offset: 2px;
 }
+
+/* Reusable depth utilities — lift + shadow on hover for a tactile,
+   dimensional feel instead of flat borders reacting with just a color change. */
+.card-lift {
+  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(200, 155, 60, 0.25);
+}
+
+/* Subtle gradient panel instead of a flat single-color fill, for surfaces
+   that should read as slightly raised/rich rather than a flat paint fill. */
+.panel-gradient {
+  background: linear-gradient(160deg, #232C40 0%, #1B2333 100%);
+}

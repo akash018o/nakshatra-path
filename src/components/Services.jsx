@@ -9,11 +9,11 @@ export default function Services({ onBook }) {
           Choose what you need help with. Every request goes straight to the astrologer.
         </p>
 
-        <div className="mt-12 grid gap-px overflow-hidden border border-brass/20 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
             <div
               key={s.id}
-              className="group flex flex-col justify-between bg-surface p-6 transition-colors hover:bg-surface2"
+              className="card-lift group flex flex-col justify-between border border-brass/20 panel-gradient p-6"
             >
               <div>
                 <h3 className="font-display text-xl text-brassLight">{s.name}</h3>
