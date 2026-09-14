@@ -4,19 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Bhagwa/saffron-red-gold — the actual traditional Hindu religious
-        // palette (temple flags, tilak, marigold, sindoor), committed to
-        // fully rather than hinted at with dark muted tones.
-        cosmos: "#170D08",       // warm near-black base, still dark enough for text contrast
-        surface: "#2B1810",      // warm dark brown surface
-        surface2: "#3A2013",     // lighter warm brown
-        saffron: "#F2811D",      // bhagwa — the primary religious accent
-        saffronLight: "#FFA94D",
-        kumkum: "#C41E2E",       // vivid sindoor red, no muddy/pink cast
+        // Yellowish rishi-muni palette — turmeric/haldi gold as the lead
+        // color, red as a secondary accent only (not co-equal with saffron).
+        cosmos: "#170D08",
+        surface: "#2B1810",
+        surface2: "#3A2013",
+        saffron: "#F0A91E",       // turmeric/haldi yellow-gold — the lead color now
+        saffronLight: "#FFCB5C",
+        kumkum: "#C41E2E",        // kept only as a small secondary accent
         kumkumLight: "#E23B4A",
-        brass: "#E3A730",        // marigold gold
-        brassLight: "#F7C85C",
-        parchment: "#FCEFDD",    // warm cream (slightly warmer than before)
+        brass: "#E8B93A",         // shifted more yellow, less orange
+        brassLight: "#FBDB80",
+        parchment: "#FCEFDD",
         dusk: "#C4915C",
       },
       fontFamily: {

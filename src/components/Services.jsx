@@ -12,19 +12,19 @@ export default function Services({ onBook }) {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "linear-gradient(160deg, rgba(242,129,29,0.45) 0%, rgba(196,30,46,0.35) 100%)",
+          background: "linear-gradient(160deg, rgba(240,169,30,0.5) 0%, rgba(196,30,46,0.2) 100%)",
           mixBlendMode: "overlay",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.25) 0%, rgba(23,13,8,0.85) 100%)" }}
+        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.45) 0%, rgba(23,13,8,0.85) 100%)" }}
       />
 
       <div className="relative mx-auto max-w-5xl">
         <Reveal>
-          <h2 className="font-display text-3xl text-parchment md:text-4xl">Services</h2>
-          <p className="mt-3 max-w-md text-parchment/60">
+          <h2 className="font-display text-3xl text-parchment drop-shadow-[0_2px_8px_rgba(23,13,8,1)] md:text-4xl">Services</h2>
+          <p className="mt-3 max-w-md text-parchment/90 drop-shadow-[0_1px_4px_rgba(23,13,8,1)]">
             Choose what you need help with. Every request goes straight to the astrologer.
           </p>
         </Reveal>

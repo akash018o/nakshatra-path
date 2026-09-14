@@ -8,18 +8,18 @@ export default function Contact() {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "linear-gradient(160deg, rgba(242,129,29,0.3) 0%, rgba(196,30,46,0.35) 100%)",
+          background: "linear-gradient(160deg, rgba(240,169,30,0.4) 0%, rgba(196,30,46,0.25) 100%)",
           mixBlendMode: "overlay",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.45) 0%, rgba(23,13,8,0.85) 100%)" }}
+        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.55) 0%, rgba(23,13,8,0.88) 100%)" }}
       />
 
       <div className="relative mx-auto max-w-md">
-        <h2 className="font-display text-3xl text-parchment">Have a quick question?</h2>
-        <p className="mt-3 text-parchment/60">
+        <h2 className="font-display text-3xl text-parchment drop-shadow-[0_2px_8px_rgba(23,13,8,1)]">Have a quick question?</h2>
+        <p className="mt-3 text-parchment/90 drop-shadow-[0_1px_4px_rgba(23,13,8,1)]">
           For anything that doesn't need a full reading, message directly on WhatsApp.
         </p>
         <a

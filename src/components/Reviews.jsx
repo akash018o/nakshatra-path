@@ -14,7 +14,7 @@ function Stars({ value, onChange }) {
           aria-label={`${n} star`}
           className="text-brass"
         >
-          <Star size={20} fill={n <= value ? "#E3A730" : "none"} strokeWidth={1.5} />
+          <Star size={20} fill={n <= value ? "#E8B93A" : "none"} strokeWidth={1.5} />
         </button>
       ))}
     </div>
@@ -53,20 +53,20 @@ export default function Reviews() {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "linear-gradient(160deg, rgba(242,129,29,0.35) 0%, rgba(196,30,46,0.3) 100%)",
+          background: "linear-gradient(160deg, rgba(240,169,30,0.45) 0%, rgba(196,30,46,0.2) 100%)",
           mixBlendMode: "overlay",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(180deg, rgba(43,24,16,0.3) 0%, rgba(43,24,16,0.88) 100%)" }}
+        style={{ background: "linear-gradient(180deg, rgba(43,24,16,0.5) 0%, rgba(43,24,16,0.9) 100%)" }}
       />
 
       <div className="relative mx-auto max-w-3xl">
-        <h2 className="font-display text-3xl text-parchment md:text-4xl">
+        <h2 className="font-display text-3xl text-parchment drop-shadow-[0_2px_8px_rgba(43,24,16,1)] md:text-4xl">
           From people we've helped
         </h2>
-        <p className="mt-3 text-parchment/60">
+        <p className="mt-3 text-parchment/90 drop-shadow-[0_1px_4px_rgba(43,24,16,1)]">
           Real reviews from real clients — each one is checked before it goes up here.
         </p>
 
@@ -76,7 +76,7 @@ export default function Reviews() {
               <div key={r.id} className="border-l-2 border-brass/40 pl-4">
                 <div className="flex gap-1">
                   {Array.from({ length: r.rating }, (_, i) => (
-                    <Star key={i} size={14} fill="#E3A730" stroke="#E3A730" />
+                    <Star key={i} size={14} fill="#E8B93A" stroke="#E8B93A" />
                   ))}
                 </div>
                 <p className="mt-2 text-sm text-parchment/80">{r.message}</p>
