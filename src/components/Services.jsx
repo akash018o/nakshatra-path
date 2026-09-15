@@ -1,5 +1,6 @@
 import { services } from "../data/services";
 import Reveal from "./Reveal";
+import ServiceIcon from "./ServiceIcon";
 import altarScene from "../assets/altar-scene.webp";
 
 export default function Services({ onBook }) {
@@ -34,6 +35,7 @@ export default function Services({ onBook }) {
             <Reveal key={s.id} delay={i * 60} className="h-full">
               <div className="card-lift group flex h-full flex-col justify-between border border-brass/20 panel-gradient p-6">
                 <div>
+                  <ServiceIcon serviceId={s.id} className="mb-4 h-14 w-14" />
                   <h3 className="font-display text-xl text-brassLight">{s.name}</h3>
                   <p className="mt-1 text-xs uppercase tracking-wide text-dusk">{s.tagline}</p>
                   <p className="mt-4 text-sm text-parchment/70">{s.description}</p>
