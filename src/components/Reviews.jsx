@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { submitReview, fetchApprovedReviews } from "../lib/reviews";
+import Reveal from "./Reveal";
+import Ornament from "./Ornament";
+import useParallax from "../hooks/useParallax";
 import tarotDesk from "../assets/tarot-desk.webp";
 
 function Stars({ value, onChange }) {
@@ -26,6 +29,7 @@ export default function Reviews() {
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: "", email: "", rating: 5, message: "" });
   const [status, setStatus] = useState("idle");
+  const [bgRef, bgStyle] = useParallax(0.1);
 
   useEffect(() => {
     fetchApprovedReviews()
@@ -48,8 +52,10 @@ export default function Reviews() {
   };
 
   return (
-    <section id="reviews" className="relative overflow-hidden bg-surface px-6 py-24 md:px-12">
-      <img src={tarotDesk} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-85" />
+    <section id="reviews" className="relative overflow-hidden bg-surface px-6 py-28 md:px-12">
+      <div ref={bgRef} className="absolute inset-0 -top-[8%] h-[116%]" style={bgStyle}>
+        <img src={tarotDesk} alt="" aria-hidden="true" loading="lazy" className="h-full w-full object-cover opacity-[0.8]" />
+      </div>
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -63,30 +69,34 @@ export default function Reviews() {
       />
 
       <div className="relative mx-auto max-w-3xl">
-        <h2 className="font-display text-3xl text-parchment drop-shadow-[0_2px_8px_rgba(43,24,16,1)] md:text-4xl">
-          From people we've helped
-        </h2>
-        <p className="mt-3 text-parchment/90 drop-shadow-[0_1px_4px_rgba(43,24,16,1)]">
-          Real reviews from real clients — each one is checked before it goes up here.
-        </p>
+        <Reveal className="text-center">
+          <p className="eyebrow text-saffronLight">Testimonials</p>
+          <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(43,24,16,1)] md:text-5xl">
+            From people we've helped
+          </h2>
+          <Ornament className="my-6" />
+          <p className="font-serif-accent mx-auto max-w-xl text-lg text-parchment/85">
+            Real reviews from real clients — each one is checked before it goes up here.
+          </p>
+        </Reveal>
 
         {!loading && reviews.length > 0 && (
           <div className="mt-10 space-y-6">
             {reviews.map((r) => (
-              <div key={r.id} className="border-l-2 border-brass/40 pl-4">
+              <div key={r.id} className="border border-brass/20 panel-gradient p-6">
                 <div className="flex gap-1">
                   {Array.from({ length: r.rating }, (_, i) => (
                     <Star key={i} size={14} fill="#E8B93A" stroke="#E8B93A" />
                   ))}
                 </div>
-                <p className="mt-2 text-sm text-parchment/80">{r.message}</p>
-                <p className="mt-1 text-xs text-dusk">— {r.name}</p>
+                <p className="font-serif-accent mt-3 text-base leading-relaxed text-parchment/85">{r.message}</p>
+                <p className="eyebrow mt-3 text-dusk">— {r.name}</p>
               </div>
             ))}
           </div>
         )}
 
-        <div className="mt-14 border-t border-brass/10 pt-10">
+        <div className="mt-14 border border-brass/20 panel-gradient p-8">
           <h3 className="font-display text-xl text-brassLight">Leave a review</h3>
           <p className="mt-1 text-xs text-parchment/50">
             Your email is only used to confirm this is a genuine review — it's never shown publicly.
@@ -130,7 +140,7 @@ export default function Reviews() {
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="border border-brass px-6 py-2 text-sm text-brass transition-colors hover:bg-brass hover:text-cosmos disabled:opacity-50"
+                className="bg-gradient-to-r from-saffron via-brassLight to-saffron bg-[length:200%_auto] px-7 py-2.5 text-sm font-medium text-cosmos shadow-lg shadow-saffron/25 transition-transform hover:scale-[1.03] disabled:opacity-50 disabled:hover:scale-100"
               >
                 {status === "sending" ? "Sending..." : "Submit review"}
               </button>

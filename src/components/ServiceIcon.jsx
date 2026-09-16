@@ -78,7 +78,7 @@ export default function ServiceIcon({ serviceId, className = "" }) {
       <svg
         viewBox="0 0 64 64"
         className="relative h-full w-full rounded-full border-2 border-brass/60 p-3 text-brassLight"
-        style={{ background: "linear-gradient(160deg, #3A2013 0%, #2B1810 100%)" }}
+        style={{ background: "linear-gradient(160deg, #3E2415 0%, #21120C 100%)" }}
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"

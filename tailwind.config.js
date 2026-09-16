@@ -6,7 +6,7 @@ export default {
       colors: {
         // Yellowish rishi-muni palette — turmeric/haldi gold as the lead
         // color, red as a secondary accent only (not co-equal with saffron).
-        cosmos: "#170D08",
+        cosmos: "#120A06",
         surface: "#2B1810",
         surface2: "#3A2013",
         saffron: "#F0A91E",       // turmeric/haldi yellow-gold — the lead color now

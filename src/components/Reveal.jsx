@@ -1,3 +1,4 @@
+import { prefersReduced } from "../lib/media";
 import { useEffect, useRef, useState } from "react";
 
 // Lightweight scroll-reveal wrapper: fades + slides content up as it enters
@@ -8,7 +9,7 @@ export default function Reveal({ children, className = "", delay = 0 }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = prefersReduced();
     if (prefersReducedMotion) {
       setVisible(true);
       return;

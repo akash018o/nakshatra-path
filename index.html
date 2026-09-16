@@ -4,7 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>astro-app</title>
+
+    <title>Nakshatra Path — Vedic Astrology, Kundali Analysis &amp; Remedies</title>
+    <meta
+      name="description"
+      content="Kundali analysis, remedies, gemstone guidance, and readings for career and relationship concerns — grounded in your actual Vedic birth chart."
+    />
+    <meta name="theme-color" content="#120A06" />
+
+    <!-- Open Graph, so shared links render properly on WhatsApp/Telegram -->
+    <meta property="og:title" content="Nakshatra Path — Vedic Astrology &amp; Remedies" />
+    <meta
+      property="og:description"
+      content="Kundali readings, remedies and gemstone guidance based on your actual birth chart."
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Warm up the font connections before the CSS asks for them -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Paint the brand background before React hydrates, so there's no white flash -->
+    <style>
+      html, body { margin: 0; background-color: #120A06; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

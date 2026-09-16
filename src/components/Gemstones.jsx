@@ -3,65 +3,88 @@ import { gemstones } from "../data/gemstones";
 import { fetchGemstoneImages } from "../lib/gemstoneImages";
 import GemIcon from "./GemIcon";
 import Reveal from "./Reveal";
+import TiltCard from "./TiltCard";
+import Ornament from "./Ornament";
+import useParallax from "../hooks/useParallax";
 import gemstoneCluster from "../assets/gemstone-cluster.webp";
 
 export default function Gemstones({ onInquire }) {
   const [images, setImages] = useState({});
+  const [bannerRef, bannerStyle] = useParallax(0.14);
 
   useEffect(() => {
     fetchGemstoneImages().then(setImages).catch(() => {});
   }, []);
 
   return (
-    <section id="gemstones" className="bg-surface">
-      {/* Full-bleed banner photo, gently breathing, fading into the section below */}
-      <div className="relative h-[220px] w-full overflow-hidden md:h-[320px]">
-        <img
-          src={gemstoneCluster}
-          alt="A collection of faceted gemstones"
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ animation: "gem-breathe 18s ease-in-out infinite" }}
+    <section id="gemstones" className="relative bg-surface">
+      {/* Full-bleed banner with parallax drift */}
+      <div className="relative h-[260px] w-full overflow-hidden md:h-[380px]">
+        <div ref={bannerRef} className="absolute inset-0 -top-[12%] h-[124%]" style={bannerStyle}>
+          <img
+            src={gemstoneCluster}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(160deg, rgba(240,169,30,0.3) 0%, rgba(196,30,46,0.15) 100%)",
+            mixBlendMode: "overlay",
+          }}
         />
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(to bottom, rgba(43,24,16,0.15) 0%, #2B1810 100%)" }}
+          style={{ background: "linear-gradient(to bottom, rgba(18,10,6,0.35) 0%, rgba(33,18,12,0.7) 55%, #21120C 100%)" }}
         />
-        <style>{`
-          @keyframes gem-breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-          }
-        `}</style>
       </div>
 
-      <div className="px-6 pb-24 pt-4 md:px-12">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="font-display text-3xl text-parchment md:text-4xl">Gemstones</h2>
-          <p className="mt-3 max-w-md text-parchment/60">
-            Recommended only after checking your chart. Prices depend on quality and carat.
-          </p>
+      <div className="px-6 pb-28 md:px-12">
+        <div className="mx-auto max-w-6xl">
+          <Reveal className="-mt-16 text-center">
+            <p className="eyebrow text-saffronLight">Matched to your chart</p>
+            <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(18,10,6,1)] md:text-5xl">
+              Gemstones
+            </h2>
+            <Ornament className="my-6" />
+            <p className="font-serif-accent mx-auto max-w-xl text-lg text-parchment/85">
+              Recommended only after reading your chart. Prices depend on quality and carat.
+            </p>
+          </Reveal>
 
-          <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
+          <div className="mt-14 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
             {gemstones.map((g, i) => (
-              <Reveal key={g.id} delay={i * 40}>
-                <button
-                  onClick={() => onInquire(g)}
-                  className="card-lift group flex w-full flex-col items-start border border-brass/15 panel-gradient p-4 text-left"
-                >
-                  {images[g.id] ? (
-                    <img
-                      src={images[g.id]}
-                      alt={g.name}
-                      className="mb-3 h-16 w-16 rounded-full border border-brass/40 object-cover"
-                    />
-                  ) : (
-                    <GemIcon stoneId={g.id} className="mb-3 h-14 w-14" />
-                  )}
-                  <p className="font-display text-base text-parchment">{g.name}</p>
-                  <p className="mt-1 text-xs text-dusk">{g.planet}</p>
-                  <p className="mt-2 text-xs text-parchment/60">{g.benefit}</p>
-                </button>
+              <Reveal key={g.id} delay={i * 45} className="h-full">
+                <TiltCard className="border border-brass/20 panel-gradient" max={11}>
+                  <button
+                    onClick={() => onInquire(g)}
+                    className="tilt-inner flex h-full w-full flex-col items-center p-5 text-center"
+                  >
+                    <div className="relative mb-4">
+                      <div
+                        className="absolute inset-[-28%] rounded-full"
+                        style={{ background: "radial-gradient(circle, rgba(240,169,30,0.3) 0%, rgba(240,169,30,0) 70%)" }}
+                      />
+                      {images[g.id] ? (
+                        <img
+                          src={images[g.id]}
+                          alt={g.name}
+                          loading="lazy"
+                          className="relative h-20 w-20 rounded-full border-2 border-brass/50 object-cover"
+                        />
+                      ) : (
+                        <GemIcon stoneId={g.id} className="relative h-20 w-20" />
+                      )}
+                    </div>
+                    <p className="font-display text-base leading-tight text-parchment">{g.name}</p>
+                    <p className="eyebrow mt-2 text-dusk">{g.planet}</p>
+                    <div className="gold-rule my-3 w-full opacity-50" />
+                    <p className="text-xs leading-relaxed text-parchment/65">{g.benefit}</p>
+                  </button>
+                </TiltCard>
               </Reveal>
             ))}
           </div>

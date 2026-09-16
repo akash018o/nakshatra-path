@@ -13,7 +13,7 @@ export default function Home() {
   const [activeService, setActiveService] = useState(null);
 
   return (
-    <div className="min-h-screen bg-cosmos font-body">
+    <div className="min-h-screen font-body">
       <Header />
       <Hero />
       <Services onBook={setActiveService} />

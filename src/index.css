@@ -1,55 +1,119 @@
-@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Marcellus&family=Work+Sans:wght@300;400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * { box-sizing: border-box; }
 
+html {
+  scroll-behavior: smooth;
+  /* Keeps anchor jumps from hiding under the sticky header */
+  scroll-padding-top: 90px;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
-  background-color: #170D08;
-  color: #EDE6D6;
+  background-color: #120A06;
+  color: #F6EADA;
   font-family: 'Work Sans', sans-serif;
-  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtle repeating mandala texture across the whole site, very low opacity —
-   a traditional temple-textile feel without needing a photo. */
+/* Layered atmosphere: mandala textile weave + a warm depth glow, so the
+   background reads as lit space rather than flat paint. */
 body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23E8B93A' stroke-width='1' opacity='0.05'%3E%3Ccircle cx='60' cy='60' r='26'/%3E%3Ccircle cx='60' cy='60' r='18'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(45 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(90 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(135 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(180 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(225 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(270 60 60)'/%3E%3Cellipse cx='60' cy='34' rx='6' ry='14' transform='rotate(315 60 60)'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23E8B93A'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 120px 120px;
+  background-image:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(240,169,30,0.10) 0%, rgba(18,10,6,0) 60%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(196,30,46,0.07) 0%, rgba(18,10,6,0) 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='%23E8B93A' stroke-width='0.8' opacity='0.045'%3E%3Ccircle cx='70' cy='70' r='30'/%3E%3Ccircle cx='70' cy='70' r='21'/%3E%3Ccircle cx='70' cy='70' r='12'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(45 70 70)'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(90 70 70)'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(135 70 70)'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(180 70 70)'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(225 70 70)'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(270 70 70)'/%3E%3Cellipse cx='70' cy='40' rx='6' ry='15' transform='rotate(315 70 70)'/%3E%3Ccircle cx='70' cy='70' r='2.5' fill='%23E8B93A'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed, fixed, scroll;
+  background-size: cover, cover, 140px 140px;
+}
+
+.font-display { font-family: 'Marcellus', serif; }
+.font-serif-accent { font-family: 'Cormorant Garamond', serif; }
+
+/* Display type wants tighter tracking at large sizes; body copy wants air. */
+h1, h2 { letter-spacing: -0.015em; }
+.eyebrow {
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+::selection { background: #C41E2E; color: #F6EADA; }
+
+:focus-visible {
+  outline: 2px solid #E8B93A;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Brass scrollbar so even the chrome feels considered. */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #120A06; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #E8B93A 0%, #8A6A1C 100%);
+  border-radius: 10px;
+  border: 2px solid #120A06;
+}
+
+/* ---- 3D depth system ---- */
+
+/* Parent establishes the perspective; the child does the tilting. */
+.tilt-scene { perspective: 900px; }
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 400ms ease,
+              border-color 400ms ease;
+  will-change: transform;
+}
+.tilt-card:hover {
+  border-color: rgba(232, 185, 58, 0.5);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.7),
+    0 0 40px -12px rgba(240, 169, 30, 0.35),
+    inset 0 1px 0 rgba(251, 219, 128, 0.14);
+}
+/* Lifts inner content off the card face so the tilt reads as real depth. */
+.tilt-inner { transform: translateZ(40px); }
+
+/* Light catching the top edge — the detail that sells a surface as physical. */
+.panel-gradient {
+  background:
+    linear-gradient(160deg, #3E2415 0%, #2A1710 55%, #21120C 100%);
+  box-shadow: inset 0 1px 0 rgba(251, 219, 128, 0.10);
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(232,185,58,0) 0%,
+    rgba(232,185,58,0.55) 50%,
+    rgba(232,185,58,0) 100%);
+}
+
+/* Slow ambient drift for background layers. */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-14px) scale(1.03); }
+}
+@keyframes shimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+.btn-shimmer {
+  background-size: 200% auto;
+  animation: shimmer 5s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
-}
-
-.font-display { font-family: 'Marcellus', serif; }
-
-::selection {
-  background: #C41E2E;
-  color: #EDE6D6;
-}
-
-:focus-visible {
-  outline: 2px solid #E8B93A;
-  outline-offset: 2px;
-}
-
-/* Reusable depth utilities — lift + shadow on hover for a tactile,
-   dimensional feel instead of flat borders reacting with just a color change. */
-.card-lift {
-  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
-}
-.card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(232, 185, 58, 0.25);
-}
-
-/* Subtle gradient panel instead of a flat single-color fill, for surfaces
-   that should read as slightly raised/rich rather than a flat paint fill. */
-.panel-gradient {
-  background: linear-gradient(160deg, #3A2013 0%, #2B1810 100%);
+  html { scroll-behavior: auto; }
+  .tilt-card:hover { transform: none !important; }
 }

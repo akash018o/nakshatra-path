@@ -35,8 +35,8 @@ export default function BookingModal({ service, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-cosmos/80 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-md border border-brass/30 panel-gradient p-8 shadow-2xl shadow-black/50">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-cosmos/85 p-4 backdrop-blur-md">
+      <div className="relative my-auto w-full max-w-md border border-brass/35 panel-gradient p-8 shadow-[0_28px_70px_-12px_rgba(0,0,0,0.85)]">
         <button
           onClick={onClose}
           aria-label="Close"
@@ -56,13 +56,13 @@ export default function BookingModal({ service, onClose }) {
               href={buildBookingWhatsAppLink({ ...form, service: service.name })}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 block bg-kumkum py-3 text-sm text-parchment transition-colors hover:bg-kumkumLight"
+              className="mt-6 block bg-gradient-to-r from-kumkum to-kumkumLight py-3 text-sm font-medium text-parchment shadow-lg shadow-kumkum/25 transition-transform hover:scale-[1.02]"
             >
               Also send via WhatsApp
             </a>
             <button
               onClick={onClose}
-              className="mt-3 w-full border border-brass px-6 py-2 text-sm text-brass hover:bg-brass hover:text-cosmos"
+              className="mt-3 w-full border border-brass/50 px-6 py-2.5 text-sm text-brassLight transition-colors hover:bg-brass/10"
             >
               Done
             </button>

@@ -1,36 +1,53 @@
 import { buildWhatsAppLink } from "../lib/whatsapp";
+import Reveal from "./Reveal";
+import Ornament from "./Ornament";
+import useParallax from "../hooks/useParallax";
 import moonPhases from "../assets/moon-phases.webp";
 
 export default function Contact() {
+  const [bgRef, bgStyle] = useParallax(0.12);
+
   return (
-    <section id="contact" className="relative overflow-hidden px-6 py-24 text-center md:px-12">
-      <img src={moonPhases} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-80" />
+    <section id="contact" className="relative overflow-hidden px-6 py-28 text-center md:px-12">
+      <div ref={bgRef} className="absolute inset-0 -top-[8%] h-[116%]" style={bgStyle}>
+        <img
+          src={moonPhases}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="h-full w-full object-cover opacity-[0.8]"
+        />
+      </div>
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "linear-gradient(160deg, rgba(240,169,30,0.4) 0%, rgba(196,30,46,0.25) 100%)",
+          background: "linear-gradient(160deg, rgba(240,169,30,0.38) 0%, rgba(196,30,46,0.22) 100%)",
           mixBlendMode: "overlay",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(180deg, rgba(23,13,8,0.55) 0%, rgba(23,13,8,0.88) 100%)" }}
+        style={{ background: "radial-gradient(ellipse 60% 70% at 50% 50%, rgba(18,10,6,0.82) 0%, rgba(18,10,6,0.55) 70%, rgba(18,10,6,0.92) 100%)" }}
       />
 
-      <div className="relative mx-auto max-w-md">
-        <h2 className="font-display text-3xl text-parchment drop-shadow-[0_2px_8px_rgba(23,13,8,1)]">Have a quick question?</h2>
-        <p className="mt-3 text-parchment/90 drop-shadow-[0_1px_4px_rgba(23,13,8,1)]">
+      <Reveal className="relative mx-auto max-w-lg">
+        <p className="eyebrow text-saffronLight">Get in touch</p>
+        <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(18,10,6,1)] md:text-5xl">
+          Have a quick question?
+        </h2>
+        <Ornament className="my-6" />
+        <p className="font-serif-accent text-lg text-parchment/85 drop-shadow-[0_1px_4px_rgba(18,10,6,1)]">
           For anything that doesn't need a full reading, message directly on WhatsApp.
         </p>
         <a
           href={buildWhatsAppLink()}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-block bg-gradient-to-r from-kumkum to-kumkumLight px-8 py-3 text-sm text-parchment shadow-lg shadow-kumkum/20 transition-transform hover:scale-105"
+          className="btn-shimmer mt-9 inline-block bg-gradient-to-r from-saffron via-brassLight to-saffron px-9 py-3.5 text-sm font-medium tracking-wide text-cosmos shadow-[0_10px_30px_-8px_rgba(240,169,30,0.6)] transition-transform hover:scale-[1.04]"
         >
           Chat on WhatsApp
         </a>
-      </div>
+      </Reveal>
     </section>
   );
 }
