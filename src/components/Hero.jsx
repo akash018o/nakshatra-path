@@ -1,40 +1,46 @@
-import { prefersReduced } from "../lib/media";
 import { useEffect, useRef, useState } from "react";
+import { prefersReduced } from "../lib/media";
+import { useLang } from "../i18n/LanguageContext";
 import zodiacVideo from "../assets/zodiac-wheel.mp4";
 import zodiacPoster from "../assets/zodiac-wheel-poster.webp";
 import milkyway from "../assets/milkyway-silhouette.webp";
 import useParallax from "../hooks/useParallax";
 import Ornament from "./Ornament";
+import Embers from "./Embers";
+
+/** Splits a line into words that animate in one after another. */
+function WordReveal({ text, className = "", baseDelay = 0 }) {
+  return (
+    <span className={`word-reveal ${className}`}>
+      {text.split(" ").map((word, i) => (
+        <span key={`${word}-${i}`} style={{ animationDelay: `${baseDelay + i * 90}ms` }}>
+          {word}&nbsp;
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export default function Hero() {
   const videoRef = useRef(null);
   const [bgRef, bgStyle] = useParallax(0.12);
-  // Poster paints immediately; the video file only starts downloading once the
-  // page has finished its critical work, so it never competes with first paint.
+  const { t, lang } = useLang();
   const [loadVideo, setLoadVideo] = useState(false);
 
   useEffect(() => {
     if (prefersReduced()) return;
     const start = () => setLoadVideo(true);
-    if (document.readyState === "complete") {
-      // requestIdleCallback where supported, else a short deferral
+    const defer = () =>
       (window.requestIdleCallback || window.setTimeout)(start, { timeout: 1200 });
-    } else {
-      window.addEventListener("load", () => {
-        (window.requestIdleCallback || window.setTimeout)(start, { timeout: 1200 });
-      }, { once: true });
-    }
+    if (document.readyState === "complete") defer();
+    else window.addEventListener("load", defer, { once: true });
   }, []);
 
-  // A <source> added after mount is ignored until the element reloads.
   useEffect(() => {
     if (!loadVideo || !videoRef.current) return;
     const el = videoRef.current;
     try {
       el.load();
-      // play() returns undefined (not a Promise) in some browsers, so guard
-      // before chaining — autoplay may also be refused, in which case the
-      // poster simply stays visible.
       const played = el.play();
       if (played && typeof played.catch === "function") played.catch(() => {});
     } catch {
@@ -44,7 +50,6 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-[94vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
-      {/* Layer 1 — sky, drifts slower than scroll for depth */}
       <div ref={bgRef} className="absolute inset-0 -top-[10%] h-[120%]" style={bgStyle}>
         <img
           src={milkyway}
@@ -55,7 +60,6 @@ export default function Hero() {
         />
       </div>
 
-      {/* Layer 2 — haldi colour grade */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -63,8 +67,6 @@ export default function Hero() {
           mixBlendMode: "overlay",
         }}
       />
-
-      {/* Layer 3 — contrast vignette anchored behind the text column */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -74,14 +76,16 @@ export default function Hero() {
         }}
       />
 
+      <Embers count={16} />
+
       <div className="relative z-10 flex max-w-2xl flex-col items-center">
         <p className="eyebrow mb-6 text-saffronLight drop-shadow-[0_1px_4px_rgba(18,10,6,1)]">
-          Vedic Astrology &amp; Remedies
+          {t.hero.eyebrow}
         </p>
 
-        {/* The wheel — concentric brass rings + ambient glow give it the
-            presence of a temple medallion rather than a floating clip. */}
         <div className="relative mx-auto mb-8 h-64 w-64 md:h-80 md:w-80">
+          {/* Rotating conic halo — light sweeping around the medallion */}
+          <div className="halo-ring absolute inset-[-9%] rounded-full opacity-70" />
           <div
             className="absolute inset-[-16%] rounded-full"
             style={{
@@ -89,7 +93,6 @@ export default function Hero() {
               animation: "float-slow 9s ease-in-out infinite",
             }}
           />
-          <div className="absolute inset-[-7%] rounded-full border border-brass/25" />
           <div className="absolute inset-[-3%] rounded-full border border-brass/40" />
           <video
             ref={videoRef}
@@ -102,32 +105,35 @@ export default function Hero() {
           </video>
         </div>
 
-        <h1 className="font-display text-[2.6rem] leading-[1.08] text-parchment drop-shadow-[0_2px_14px_rgba(18,10,6,1)] md:text-[4.2rem]">
-          Your chart already
+        {/* key on lang so the reveal replays when the language changes */}
+        <h1
+          key={lang}
+          className="font-display text-[2.6rem] leading-[1.08] text-parchment drop-shadow-[0_2px_14px_rgba(18,10,6,1)] md:text-[4.2rem]"
+        >
+          <WordReveal text={t.hero.titleLine1} />
           <span className="block bg-gradient-to-r from-brassLight via-saffron to-brassLight bg-clip-text text-transparent">
-            has the answer.
+            <WordReveal text={t.hero.titleLine2} baseDelay={260} />
           </span>
         </h1>
 
         <Ornament className="my-7 w-full" />
 
         <p className="font-serif-accent mx-auto max-w-lg text-lg leading-relaxed text-parchment/85 drop-shadow-[0_1px_6px_rgba(18,10,6,1)] md:text-xl">
-          Kundali readings, remedies and gemstone guidance — grounded in your
-          actual birth chart, not a horoscope column.
+          {t.hero.subtitle}
         </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
           <a
             href="#services"
-            className="btn-shimmer inline-block bg-gradient-to-r from-saffron via-brassLight to-saffron px-9 py-3.5 text-sm font-medium tracking-wide text-cosmos shadow-[0_10px_30px_-8px_rgba(240,169,30,0.6)] transition-transform hover:scale-[1.04]"
+            className="btn-press btn-shimmer inline-block bg-gradient-to-r from-saffron via-brassLight to-saffron px-9 py-3.5 text-sm font-medium tracking-wide text-cosmos shadow-[0_10px_30px_-8px_rgba(240,169,30,0.6)]"
           >
-            Explore Services
+            {t.hero.ctaPrimary}
           </a>
           <a
             href="#contact"
-            className="inline-block border border-brass/50 px-9 py-3.5 text-sm tracking-wide text-brassLight backdrop-blur-sm transition-colors hover:border-brass hover:bg-brass/10"
+            className="btn-press inline-block border border-brass/50 px-9 py-3.5 text-sm tracking-wide text-brassLight backdrop-blur-sm hover:border-brass hover:bg-brass/10"
           >
-            Talk to an Astrologer
+            {t.hero.ctaSecondary}
           </a>
         </div>
       </div>

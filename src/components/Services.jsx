@@ -1,4 +1,5 @@
 import { services } from "../data/services";
+import { useLang } from "../i18n/LanguageContext";
 import Reveal from "./Reveal";
 import ServiceIcon from "./ServiceIcon";
 import TiltCard from "./TiltCard";
@@ -8,6 +9,7 @@ import altarScene from "../assets/altar-scene.webp";
 
 export default function Services({ onBook }) {
   const [bgRef, bgStyle] = useParallax(0.1);
+  const { t } = useLang();
 
   return (
     <section id="services" className="relative overflow-hidden px-6 py-28 md:px-12">
@@ -34,13 +36,13 @@ export default function Services({ onBook }) {
 
       <div className="relative mx-auto max-w-6xl">
         <Reveal className="text-center">
-          <p className="eyebrow text-saffronLight">What we offer</p>
+          <p className="eyebrow text-saffronLight">{t.services.eyebrow}</p>
           <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(18,10,6,1)] md:text-5xl">
-            Services
+            {t.services.heading}
           </h2>
           <Ornament className="my-6" />
           <p className="font-serif-accent mx-auto max-w-xl text-lg text-parchment/85 drop-shadow-[0_1px_4px_rgba(18,10,6,1)]">
-            Choose what you need help with. Every request goes straight to the astrologer.
+            {t.services.subtitle}
           </p>
         </Reveal>
 
@@ -51,16 +53,27 @@ export default function Services({ onBook }) {
                 <div className="tilt-inner flex h-full flex-col justify-between">
                   <div>
                     <ServiceIcon serviceId={s.id} className="mb-5 h-16 w-16" />
-                    <h3 className="font-display text-xl text-brassLight">{s.name}</h3>
-                    <p className="eyebrow mt-2 text-dusk">{s.tagline}</p>
+                    <h3 className="font-display text-xl text-brassLight">{t.services.items[s.id].name}</h3>
+                    <p className="eyebrow mt-2 text-dusk">{t.services.items[s.id].tagline}</p>
                     <div className="gold-rule my-4 opacity-60" />
-                    <p className="text-sm leading-relaxed text-parchment/75">{s.description}</p>
+                    <p className="text-sm leading-relaxed text-parchment/75">{t.services.items[s.id].description}</p>
                   </div>
                   <button
-                    onClick={() => onBook(s)}
+                    onClick={() =>
+                      onBook({
+                        ...s,
+                        // Shown to the user in their language...
+                        name: t.services.items[s.id].name,
+                        tagline: t.services.items[s.id].tagline,
+                        // ...but always stored in English, so the admin panel
+                        // groups every booking for a service together instead
+                        // of splitting it by the visitor's language.
+                        storageName: s.name,
+                      })
+                    }
                     className="group mt-7 inline-flex items-center gap-2 self-start text-sm text-brass transition-colors hover:text-brassLight"
                   >
-                    Request this service
+                    {t.services.cta}
                     <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </button>
                 </div>

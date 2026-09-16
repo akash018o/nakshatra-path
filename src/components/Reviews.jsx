@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { submitReview, fetchApprovedReviews } from "../lib/reviews";
+import { useLang } from "../i18n/LanguageContext";
 import Reveal from "./Reveal";
 import Ornament from "./Ornament";
 import useParallax from "../hooks/useParallax";
@@ -30,6 +31,7 @@ export default function Reviews() {
   const [form, setForm] = useState({ name: "", email: "", rating: 5, message: "" });
   const [status, setStatus] = useState("idle");
   const [bgRef, bgStyle] = useParallax(0.1);
+  const { t } = useLang();
 
   useEffect(() => {
     fetchApprovedReviews()
@@ -70,13 +72,13 @@ export default function Reviews() {
 
       <div className="relative mx-auto max-w-3xl">
         <Reveal className="text-center">
-          <p className="eyebrow text-saffronLight">Testimonials</p>
+          <p className="eyebrow text-saffronLight">{t.reviews.eyebrow}</p>
           <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(43,24,16,1)] md:text-5xl">
-            From people we've helped
+            {t.reviews.heading}
           </h2>
           <Ornament className="my-6" />
           <p className="font-serif-accent mx-auto max-w-xl text-lg text-parchment/85">
-            Real reviews from real clients — each one is checked before it goes up here.
+            {t.reviews.subtitle}
           </p>
         </Reveal>
 
@@ -97,20 +99,20 @@ export default function Reviews() {
         )}
 
         <div className="mt-14 border border-brass/20 panel-gradient p-8">
-          <h3 className="font-display text-xl text-brassLight">Leave a review</h3>
+          <h3 className="font-display text-xl text-brassLight">{t.reviews.formHeading}</h3>
           <p className="mt-1 text-xs text-parchment/50">
-            Your email is only used to confirm this is a genuine review — it's never shown publicly.
+            {t.reviews.emailNote}
           </p>
 
           {status === "sent" ? (
             <p className="mt-6 text-sm text-brassLight">
-              Thank you — your review has been submitted and will appear here once checked.
+              {t.reviews.thanks}
             </p>
           ) : (
             <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               <input
                 required
-                placeholder="Your name"
+                placeholder={t.reviews.name}
                 className="w-full border-b border-brass/30 bg-transparent py-2 text-parchment placeholder:text-parchment/30 outline-none focus:border-brass"
                 value={form.name}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -118,31 +120,31 @@ export default function Reviews() {
               <input
                 required
                 type="email"
-                placeholder="Your email"
+                placeholder={t.reviews.email}
                 className="w-full border-b border-brass/30 bg-transparent py-2 text-parchment placeholder:text-parchment/30 outline-none focus:border-brass"
                 value={form.email}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
               />
               <div>
-                <p className="mb-2 text-xs uppercase tracking-wide text-dusk">Rating</p>
+                <p className="eyebrow mb-2 text-dusk">{t.reviews.rating}</p>
                 <Stars value={form.rating} onChange={(n) => setForm((f) => ({ ...f, rating: n }))} />
               </div>
               <textarea
                 required
-                placeholder="How was your experience?"
+                placeholder={t.reviews.message}
                 className="min-h-[90px] w-full resize-none border-b border-brass/30 bg-transparent py-2 text-parchment placeholder:text-parchment/30 outline-none focus:border-brass"
                 value={form.message}
                 onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               />
               {status === "error" && (
-                <p className="text-sm text-kumkumLight">Couldn't submit — please try again.</p>
+                <p className="text-sm text-kumkumLight">{t.reviews.error}</p>
               )}
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="bg-gradient-to-r from-saffron via-brassLight to-saffron bg-[length:200%_auto] px-7 py-2.5 text-sm font-medium text-cosmos shadow-lg shadow-saffron/25 transition-transform hover:scale-[1.03] disabled:opacity-50 disabled:hover:scale-100"
+                className="btn-press bg-gradient-to-r from-saffron via-brassLight to-saffron bg-[length:200%_auto] px-7 py-2.5 text-sm font-medium text-cosmos shadow-lg shadow-saffron/25 transition-transform hover:scale-[1.03] disabled:opacity-50 disabled:hover:scale-100"
               >
-                {status === "sending" ? "Sending..." : "Submit review"}
+                {status === "sending" ? t.reviews.sending : t.reviews.submit}
               </button>
             </form>
           )}

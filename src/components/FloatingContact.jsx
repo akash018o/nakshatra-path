@@ -1,13 +1,16 @@
+import { useLang } from "../i18n/LanguageContext";
+
 const PHONE = "918630352867"; // +91 8630352867 — same number for both
 
 export default function FloatingContact() {
+  const { t } = useLang();
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
       <a
         href={`https://wa.me/${PHONE}`}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Chat on WhatsApp"
+        aria-label={t.nav.whatsapp}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-black/40 transition-transform hover:scale-110"
       >
         <svg viewBox="0 0 32 32" className="h-7 w-7" fill="white">
@@ -18,7 +21,7 @@ export default function FloatingContact() {
         href={`https://t.me/+${PHONE}`}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Message on Telegram"
+        aria-label={t.nav.telegram}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-[#229ED9] shadow-lg shadow-black/40 transition-transform hover:scale-110"
       >
         <svg viewBox="0 0 32 32" className="h-7 w-7" fill="white">

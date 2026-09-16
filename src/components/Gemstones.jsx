@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { gemstones } from "../data/gemstones";
+import { useLang } from "../i18n/LanguageContext";
 import { fetchGemstoneImages } from "../lib/gemstoneImages";
 import GemIcon from "./GemIcon";
 import Reveal from "./Reveal";
@@ -11,6 +12,7 @@ import gemstoneCluster from "../assets/gemstone-cluster.webp";
 export default function Gemstones({ onInquire }) {
   const [images, setImages] = useState({});
   const [bannerRef, bannerStyle] = useParallax(0.14);
+  const { t } = useLang();
 
   useEffect(() => {
     fetchGemstoneImages().then(setImages).catch(() => {});
@@ -45,13 +47,13 @@ export default function Gemstones({ onInquire }) {
       <div className="px-6 pb-28 md:px-12">
         <div className="mx-auto max-w-6xl">
           <Reveal className="-mt-16 text-center">
-            <p className="eyebrow text-saffronLight">Matched to your chart</p>
+            <p className="eyebrow text-saffronLight">{t.gemstones.eyebrow}</p>
             <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(18,10,6,1)] md:text-5xl">
-              Gemstones
+              {t.gemstones.heading}
             </h2>
             <Ornament className="my-6" />
             <p className="font-serif-accent mx-auto max-w-xl text-lg text-parchment/85">
-              Recommended only after reading your chart. Prices depend on quality and carat.
+              {t.gemstones.subtitle}
             </p>
           </Reveal>
 
@@ -60,7 +62,7 @@ export default function Gemstones({ onInquire }) {
               <Reveal key={g.id} delay={i * 45} className="h-full">
                 <TiltCard className="border border-brass/20 panel-gradient" max={11}>
                   <button
-                    onClick={() => onInquire(g)}
+                    onClick={() => onInquire({ ...g, ...t.gemstones.items[g.id] })}
                     className="tilt-inner flex h-full w-full flex-col items-center p-5 text-center"
                   >
                     <div className="relative mb-4">
@@ -71,7 +73,7 @@ export default function Gemstones({ onInquire }) {
                       {images[g.id] ? (
                         <img
                           src={images[g.id]}
-                          alt={g.name}
+                          alt={t.gemstones.items[g.id].name}
                           loading="lazy"
                           className="relative h-20 w-20 rounded-full border-2 border-brass/50 object-cover"
                         />
@@ -79,10 +81,10 @@ export default function Gemstones({ onInquire }) {
                         <GemIcon stoneId={g.id} className="relative h-20 w-20" />
                       )}
                     </div>
-                    <p className="font-display text-base leading-tight text-parchment">{g.name}</p>
-                    <p className="eyebrow mt-2 text-dusk">{g.planet}</p>
+                    <p className="font-display text-base leading-tight text-parchment">{t.gemstones.items[g.id].name}</p>
+                    <p className="eyebrow mt-2 text-dusk">{t.gemstones.items[g.id].planet}</p>
                     <div className="gold-rule my-3 w-full opacity-50" />
-                    <p className="text-xs leading-relaxed text-parchment/65">{g.benefit}</p>
+                    <p className="text-xs leading-relaxed text-parchment/65">{t.gemstones.items[g.id].benefit}</p>
                   </button>
                 </TiltCard>
               </Reveal>

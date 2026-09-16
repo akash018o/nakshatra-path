@@ -1,29 +1,65 @@
+import { useEffect, useRef, useState } from "react";
 import { prefersReduced, hasHover } from "../lib/media";
-import { useRef, useState } from "react";
 
 /**
- * Card that tilts in 3D toward the pointer, with a light glare that tracks
- * the same position. Pointer-driven rather than a canned animation, so it
- * feels like a physical object responding to you.
+ * 3D card with two input modes:
  *
- * Disabled on touch devices (no hover there) and for reduced-motion users.
+ *  - Desktop (has a pointer): tilts toward the cursor, with a glare that
+ *    tracks the same position.
+ *  - Touch (no pointer): tilts based on where the card sits in the viewport,
+ *    so the 3D still reads while scrolling. Cards lean as they rise into view
+ *    and settle flat at centre screen. Costs nothing while offscreen.
  */
 export default function TiltCard({ children, className = "", max = 9 }) {
   const ref = useRef(null);
   const [style, setStyle] = useState({});
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
 
-  const canTilt = () =>
-    typeof window !== "undefined" &&
-    hasHover() &&
-    !prefersReduced();
+  const canPointerTilt = () => hasHover() && !prefersReduced();
+
+  useEffect(() => {
+    if (hasHover() || prefersReduced()) return;
+    const node = ref.current;
+    if (!node) return;
+
+    let ticking = false;
+    let visible = false;
+
+    const update = () => {
+      ticking = false;
+      if (!visible) return;
+      const rect = node.getBoundingClientRect();
+      const centre = rect.top + rect.height / 2;
+      const progress = (window.innerHeight / 2 - centre) / (window.innerHeight / 2);
+      const clamped = Math.max(-1, Math.min(1, progress));
+      setStyle({
+        transform: `perspective(900px) rotateX(${clamped * -6}deg) scale(${1 - Math.abs(clamped) * 0.02})`,
+      });
+    };
+
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => { visible = entry.isIntersecting; if (visible) onScroll(); },
+      { threshold: 0 }
+    );
+    observer.observe(node);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const handleMove = (e) => {
-    if (!canTilt() || !ref.current) return;
+    if (!canPointerTilt() || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-
     setStyle({
       transform: `rotateY(${(px - 0.5) * max * 2}deg) rotateX(${(0.5 - py) * max * 2}deg) translateY(-6px)`,
     });
@@ -31,6 +67,7 @@ export default function TiltCard({ children, className = "", max = 9 }) {
   };
 
   const handleLeave = () => {
+    if (!canPointerTilt()) return;
     setStyle({ transform: "rotateY(0deg) rotateX(0deg) translateY(0)" });
     setGlare((g) => ({ ...g, opacity: 0 }));
   };
@@ -44,7 +81,6 @@ export default function TiltCard({ children, className = "", max = 9 }) {
         style={style}
         className={`tilt-card relative h-full overflow-hidden ${className}`}
       >
-        {/* Glare follows the pointer across the card face */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 transition-opacity duration-300"

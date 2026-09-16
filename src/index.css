@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Marcellus&family=Work+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Marcellus&family=Work+Sans:wght@300;400;500;600&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -112,8 +112,93 @@ h1, h2 { letter-spacing: -0.015em; }
   animation: shimmer 5s linear infinite;
 }
 
+
+/* ---- Hindi / Devanagari ---- */
+/* Tiro Devanagari Hindi is a proper text face for Devanagari; the Latin fonts
+   have no Devanagari glyphs at all, so it must lead the stack when Hindi is on.
+   Devanagari also needs more line-height — its matras sit above and below. */
+.lang-hi body,
+.lang-hi .font-display,
+.lang-hi .font-serif-accent {
+  font-family: 'Tiro Devanagari Hindi', 'Marcellus', serif;
+}
+.lang-hi h1, .lang-hi h2, .lang-hi h3 { line-height: 1.35; letter-spacing: 0; }
+.lang-hi p, .lang-hi li, .lang-hi button, .lang-hi a { line-height: 1.75; }
+.lang-hi .eyebrow { letter-spacing: 0.08em; text-transform: none; }
+
+/* ---- Scroll progress bar ---- */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  z-index: 60;
+  background: linear-gradient(90deg, #F0A91E, #FBDB80, #C41E2E);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ---- Floating embers (temple sparks) ---- */
+@keyframes ember-rise {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-120px) translateX(var(--drift, 20px)) scale(0.4); opacity: 0; }
+}
+.ember {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #FBDB80 0%, rgba(240,169,30,0) 70%);
+  animation: ember-rise var(--dur, 9s) ease-out infinite;
+  animation-delay: var(--delay, 0s);
+  pointer-events: none;
+}
+
+/* ---- Magnetic / pressable buttons ---- */
+.btn-press {
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease, filter 220ms ease;
+}
+.btn-press:hover { transform: translateY(-2px) scale(1.035); filter: brightness(1.06); }
+.btn-press:active { transform: translateY(0) scale(0.97); }
+
+/* ---- Touch feedback: tilt needs a pointer, so touch gets a press state ---- */
+@media (hover: none) {
+  .tilt-card:active {
+    transform: scale(0.975);
+    border-color: rgba(232, 185, 58, 0.55);
+  }
+}
+
+/* Removes the blue flash Android/iOS paint over tapped elements */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* ---- Word-by-word headline reveal ---- */
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(24px) rotateX(-40deg); }
+  to   { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+.word-reveal > span {
+  display: inline-block;
+  animation: word-in 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* ---- Slow rotating conic halo ---- */
+@keyframes halo-spin { to { transform: rotate(360deg); } }
+.halo-ring {
+  background: conic-gradient(
+    from 0deg,
+    rgba(240,169,30,0) 0deg,
+    rgba(251,219,128,0.55) 70deg,
+    rgba(240,169,30,0) 150deg,
+    rgba(240,169,30,0) 210deg,
+    rgba(251,219,128,0.4) 290deg,
+    rgba(240,169,30,0) 360deg
+  );
+  animation: halo-spin 14s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
   .tilt-card:hover { transform: none !important; }
+  .word-reveal > span { opacity: 1 !important; transform: none !important; }
 }

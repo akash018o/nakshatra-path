@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "./i18n/LanguageContext";
 import Home from "./pages/Home";
 
 // Admin pulls in auth, uploads, and CSV export logic that public visitors
@@ -8,8 +9,9 @@ const Admin = lazy(() => import("./pages/Admin"));
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
         <Route path="/" element={<Home />} />
         <Route
           path="/admin"
@@ -19,7 +21,8 @@ export default function App() {
             </Suspense>
           }
         />
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }

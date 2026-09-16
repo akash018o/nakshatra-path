@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-
-const LINKS = [
-  { href: "#services", label: "Services" },
-  { href: "#gemstones", label: "Gemstones" },
-  { href: "#reviews", label: "Reviews" },
-  { href: "#contact", label: "Contact" },
-];
+import { useLang } from "../i18n/LanguageContext";
+import LanguageToggle from "./LanguageToggle";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useLang();
+
+  const LINKS = [
+    { href: "#services", label: t.nav.services },
+    { href: "#gemstones", label: t.nav.gemstones },
+    { href: "#reviews", label: t.nav.reviews },
+    { href: "#contact", label: t.nav.contact },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -42,11 +45,12 @@ export default function Header() {
             <path d="M20 4 V12 M20 28 V36 M4 20 H12 M28 20 H36" />
           </svg>
           <span className="font-display text-lg tracking-wide text-parchment md:text-xl">
-            Nakshatra Path
+            {t.brand}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-9 text-sm text-parchment/75 md:flex">
+        <div className="hidden items-center gap-7 md:flex">
+        <nav className="flex items-center gap-8 text-sm text-parchment/75">
           {LINKS.map((l) => (
             <a
               key={l.href}
@@ -58,14 +62,19 @@ export default function Header() {
             </a>
           ))}
         </nav>
+        <LanguageToggle />
+        </div>
 
+        <div className="flex items-center gap-3 md:hidden">
+        <LanguageToggle />
         <button
           onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          className="text-parchment md:hidden"
+          aria-label={t.nav.openMenu}
+          className="text-parchment"
         >
           <Menu size={26} />
         </button>
+        </div>
       </div>
 
       {/* Dimmed backdrop — tap to close */}
@@ -85,8 +94,8 @@ export default function Header() {
         style={{ background: "linear-gradient(180deg, #3E2415 0%, #21120C 100%)" }}
       >
         <div className="flex items-center justify-between">
-          <span className="font-display text-lg text-parchment">Menu</span>
-          <button onClick={() => setOpen(false)} aria-label="Close menu" className="text-parchment">
+          <span className="font-display text-lg text-parchment">{t.nav.menu}</span>
+          <button onClick={() => setOpen(false)} aria-label={t.nav.closeMenu} className="text-parchment">
             <X size={24} />
           </button>
         </div>

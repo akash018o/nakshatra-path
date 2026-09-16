@@ -1,4 +1,5 @@
 import { buildWhatsAppLink } from "../lib/whatsapp";
+import { useLang } from "../i18n/LanguageContext";
 import Reveal from "./Reveal";
 import Ornament from "./Ornament";
 import useParallax from "../hooks/useParallax";
@@ -6,6 +7,7 @@ import moonPhases from "../assets/moon-phases.webp";
 
 export default function Contact() {
   const [bgRef, bgStyle] = useParallax(0.12);
+  const { t } = useLang();
 
   return (
     <section id="contact" className="relative overflow-hidden px-6 py-28 text-center md:px-12">
@@ -31,21 +33,21 @@ export default function Contact() {
       />
 
       <Reveal className="relative mx-auto max-w-lg">
-        <p className="eyebrow text-saffronLight">Get in touch</p>
+        <p className="eyebrow text-saffronLight">{t.contact.eyebrow}</p>
         <h2 className="mt-3 font-display text-4xl text-parchment drop-shadow-[0_2px_10px_rgba(18,10,6,1)] md:text-5xl">
-          Have a quick question?
+          {t.contact.heading}
         </h2>
         <Ornament className="my-6" />
         <p className="font-serif-accent text-lg text-parchment/85 drop-shadow-[0_1px_4px_rgba(18,10,6,1)]">
-          For anything that doesn't need a full reading, message directly on WhatsApp.
+          {t.contact.subtitle}
         </p>
         <a
           href={buildWhatsAppLink()}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-shimmer mt-9 inline-block bg-gradient-to-r from-saffron via-brassLight to-saffron px-9 py-3.5 text-sm font-medium tracking-wide text-cosmos shadow-[0_10px_30px_-8px_rgba(240,169,30,0.6)] transition-transform hover:scale-[1.04]"
+          className="btn-press btn-shimmer mt-9 inline-block bg-gradient-to-r from-saffron via-brassLight to-saffron px-9 py-3.5 text-sm font-medium tracking-wide text-cosmos shadow-[0_10px_30px_-8px_rgba(240,169,30,0.6)] transition-transform hover:scale-[1.04]"
         >
-          Chat on WhatsApp
+          {t.contact.cta}
         </a>
       </Reveal>
     </section>
