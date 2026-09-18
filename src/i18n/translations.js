@@ -19,7 +19,7 @@ export const translations = {
 
     hero: {
       eyebrow: "Vedic Astrology & Remedies",
-      titleLine1: "Your chart already",
+      titleLine1: "Your chart already has the answer",
       titleLine2: "has the answer.",
       subtitle:
         "Kundali readings, remedies and gemstone guidance — grounded in your actual birth chart, not a horoscope column.",
