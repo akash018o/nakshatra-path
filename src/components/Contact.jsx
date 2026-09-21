@@ -3,11 +3,13 @@ import { useLang } from "../i18n/LanguageContext";
 import Reveal from "./Reveal";
 import Ornament from "./Ornament";
 import useParallax from "../hooks/useParallax";
+import { useSettings } from "../settings/SettingsContext";
 import moonPhases from "../assets/moon-phases.webp";
 
 export default function Contact() {
   const [bgRef, bgStyle] = useParallax(0.12);
   const { t } = useLang();
+  const { whatsapp_number } = useSettings();
 
   return (
     <section id="contact" className="relative overflow-hidden px-6 py-28 text-center md:px-12">
@@ -42,7 +44,7 @@ export default function Contact() {
           {t.contact.subtitle}
         </p>
         <a
-          href={buildWhatsAppLink()}
+          href={buildWhatsAppLink(whatsapp_number)}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-press btn-shimmer mt-9 inline-block bg-gradient-to-r from-saffron via-brassLight to-saffron px-9 py-3.5 text-sm font-medium tracking-wide text-cosmos shadow-[0_10px_30px_-8px_rgba(240,169,30,0.6)] transition-transform hover:scale-[1.04]"

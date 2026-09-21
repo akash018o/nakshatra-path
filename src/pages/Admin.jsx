@@ -3,6 +3,8 @@ import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { gemstones } from "../data/gemstones";
 import { fetchGemstoneImages, uploadGemstoneImage } from "../lib/gemstoneImages";
 import { getSession, onAuthChange, signOut } from "../lib/auth";
+import { fetchSettings, updateSetting } from "../lib/settings";
+import { useSettingsSetter } from "../settings/SettingsContext";
 import GemIcon from "../components/GemIcon";
 import AdminLogin from "../components/AdminLogin";
 
@@ -20,6 +22,11 @@ export default function Admin() {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [settings, setSettingsLocal] = useState(null);
+  const [settingsSaving, setSettingsSaving] = useState(false);
+  const [settingsSaved, setSettingsSaved] = useState(false);
+  const [settingsError, setSettingsError] = useState(null);
+  const setGlobalSettings = useSettingsSetter();
 
   useEffect(() => {
     getSession().then(setSession);
@@ -33,15 +40,17 @@ export default function Admin() {
 
   async function load() {
     setLoading(true);
-    const [b, r, imgs] = await Promise.all([
+    const [b, r, imgs, s] = await Promise.all([
       supabase.from("bookings").select("*").order("created_at", { ascending: false }),
       supabase.from("reviews").select("*").order("created_at", { ascending: false }),
       fetchGemstoneImages().catch(() => ({})),
+      fetchSettings().catch(() => null),
     ]);
     if (b.error) setError(b.error.message);
     else setBookings(b.data || []);
     if (!r.error) setReviews(r.data || []);
     setGemImages(imgs);
+    if (s) setSettingsLocal(s);
     setLoading(false);
   }
 
@@ -77,6 +86,27 @@ export default function Admin() {
       alert("Upload failed: " + err.message);
     } finally {
       setUploadingId(null);
+    }
+  }
+
+  async function saveSettings(updated) {
+    setSettingsSaving(true);
+    setSettingsError(null);
+    setSettingsSaved(false);
+    try {
+      // Only the changed keys need a round-trip, but for two small fields
+      // it's simpler and just as fast to write both.
+      await Promise.all(
+        Object.entries(updated).map(([key, value]) => updateSetting(key, value))
+      );
+      setSettingsLocal(updated);
+      setGlobalSettings(updated); // live site picks this up immediately, no reload
+      setSettingsSaved(true);
+      setTimeout(() => setSettingsSaved(false), 2500);
+    } catch (err) {
+      setSettingsError(err.message || "Couldn't save settings");
+    } finally {
+      setSettingsSaving(false);
     }
   }
 
@@ -167,6 +197,12 @@ export default function Admin() {
           className={`border px-4 py-2 ${tab === "gemstones" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
         >
           Gemstone photos
+        </button>
+        <button
+          onClick={() => setTab("settings")}
+          className={`border px-4 py-2 ${tab === "settings" ? "border-brass text-brass" : "border-brass/20 text-parchment/60"}`}
+        >
+          Settings
         </button>
       </div>
 
@@ -299,7 +335,7 @@ export default function Admin() {
             ))
           )}
         </div>
-      ) : (
+      ) : tab === "gemstones" ? (
         <div className="mt-8">
           <p className="mb-6 max-w-lg text-sm text-parchment/60">
             Upload a real photo for any stone below — it replaces the placeholder icon
@@ -337,7 +373,122 @@ export default function Admin() {
             ))}
           </div>
         </div>
+      ) : (
+        <SettingsPanel
+          settings={settings}
+          saving={settingsSaving}
+          saved={settingsSaved}
+          error={settingsError}
+          onSave={saveSettings}
+        />
       )}
+    </div>
+  );
+}
+
+function SettingsPanel({ settings, saving, saved, error, onSave }) {
+  const [whatsapp, setWhatsapp] = useState(settings?.whatsapp_number || "");
+  const [telegram, setTelegram] = useState(settings?.telegram_number || "");
+  const [sameAsWhatsapp, setSameAsWhatsapp] = useState(
+    !settings || settings.whatsapp_number === settings.telegram_number
+  );
+
+  // If settings finish loading after this panel first mounts, sync the
+  // fields once rather than leaving them blank.
+  useEffect(() => {
+    if (settings) {
+      setWhatsapp(settings.whatsapp_number || "");
+      setTelegram(settings.telegram_number || "");
+      setSameAsWhatsapp(settings.whatsapp_number === settings.telegram_number);
+    }
+  }, [settings]);
+
+  const digitsOnly = (v) => v.replace(/[^\d]/g, "");
+  const isValid = (v) => /^\d{10,15}$/.test(v);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const finalTelegram = sameAsWhatsapp ? whatsapp : telegram;
+    onSave({ whatsapp_number: whatsapp, telegram_number: finalTelegram });
+  };
+
+  const whatsappValid = isValid(whatsapp);
+  const telegramValid = sameAsWhatsapp || isValid(telegram);
+
+  return (
+    <div className="mt-8 max-w-lg">
+      <p className="mb-6 text-sm text-parchment/60">
+        Changes here go live on the site immediately — no code change or
+        redeploy needed. Numbers include the country code, digits only
+        (e.g. <span className="text-brassLight">918630352867</span> for
+        +91&nbsp;86303&nbsp;52867).
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-5 border border-brass/20 panel-gradient p-6">
+        <div>
+          <label className="mb-1.5 block text-xs uppercase tracking-wide text-dusk">
+            WhatsApp number
+          </label>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={whatsapp}
+            onChange={(e) => setWhatsapp(digitsOnly(e.target.value))}
+            placeholder="918630352867"
+            className="w-full border border-brass/30 bg-surface px-3 py-2 text-parchment placeholder:text-parchment/30 outline-none focus:border-brass"
+          />
+          {whatsapp && !whatsappValid && (
+            <p className="mt-1 text-xs text-kumkumLight">
+              Should be 10–15 digits, country code included, no + or spaces.
+            </p>
+          )}
+          <p className="mt-1 text-xs text-parchment/40">
+            Used for the floating button, the Contact page, and the "send via WhatsApp" link after a booking.
+          </p>
+        </div>
+
+        <label className="flex items-center gap-2 text-sm text-parchment/70">
+          <input
+            type="checkbox"
+            checked={sameAsWhatsapp}
+            onChange={(e) => setSameAsWhatsapp(e.target.checked)}
+            className="accent-brass"
+          />
+          Telegram uses the same number
+        </label>
+
+        {!sameAsWhatsapp && (
+          <div>
+            <label className="mb-1.5 block text-xs uppercase tracking-wide text-dusk">
+              Telegram number
+            </label>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={telegram}
+              onChange={(e) => setTelegram(digitsOnly(e.target.value))}
+              placeholder="918630352867"
+              className="w-full border border-brass/30 bg-surface px-3 py-2 text-parchment placeholder:text-parchment/30 outline-none focus:border-brass"
+            />
+            {telegram && !telegramValid && (
+              <p className="mt-1 text-xs text-kumkumLight">
+                Should be 10–15 digits, country code included, no + or spaces.
+              </p>
+            )}
+          </div>
+        )}
+
+        {error && <p className="text-sm text-kumkumLight">{error}</p>}
+        {saved && <p className="text-sm text-brassLight">Saved — the live site is already using it.</p>}
+
+        <button
+          type="submit"
+          disabled={saving || !whatsappValid || !telegramValid}
+          className="bg-gradient-to-r from-saffron via-brassLight to-saffron px-6 py-2.5 text-sm font-medium text-cosmos shadow-lg shadow-saffron/25 transition-transform hover:scale-[1.02] disabled:opacity-40 disabled:hover:scale-100"
+        >
+          {saving ? "Saving..." : "Save settings"}
+        </button>
+      </form>
     </div>
   );
 }

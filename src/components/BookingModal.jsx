@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { submitBooking } from "../lib/bookings";
 import { buildBookingWhatsAppLink } from "../lib/whatsapp";
 import { useLang } from "../i18n/LanguageContext";
+import { useSettings } from "../settings/SettingsContext";
 
 const inputClass =
   "w-full border-b border-brass/30 bg-transparent py-2 text-parchment placeholder:text-parchment/30 focus:border-brass outline-none";
@@ -19,6 +20,7 @@ export default function BookingModal({ service, onClose }) {
   });
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const { t } = useLang();
+  const { whatsapp_number } = useSettings();
 
   if (!service) return null;
 
@@ -54,7 +56,7 @@ export default function BookingModal({ service, onClose }) {
               {t.booking.sentBody}
             </p>
             <a
-              href={buildBookingWhatsAppLink({ ...form, service: service.storageName || service.name })}
+              href={buildBookingWhatsAppLink(whatsapp_number, { ...form, service: service.storageName || service.name })}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-press mt-6 block bg-gradient-to-r from-kumkum to-kumkumLight py-3 text-sm font-medium text-parchment shadow-lg shadow-kumkum/25 transition-transform hover:scale-[1.02]"

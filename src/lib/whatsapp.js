@@ -2,14 +2,18 @@
 // number — used both on the Contact page and as a "send via WhatsApp"
 // follow-up after a booking is saved, since the Cloud API's silent
 // server-to-owner send needs Meta Business approval we're skipping for now.
-const OWNER_WHATSAPP_NUMBER = "918630352867"; // +91 8630352867
+//
+// The number is no longer hardcoded here — callers pass it in from
+// useSettings() (see SettingsContext), which the owner can edit from
+// /admin. DEFAULT_SETTINGS in lib/settings.js is the fallback if that
+// hasn't loaded yet.
 
-export function buildWhatsAppLink(message = "Hi, I'd like to know more about your services.") {
+export function buildWhatsAppLink(number, message = "Hi, I'd like to know more about your services.") {
   const encoded = encodeURIComponent(message);
-  return `https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encoded}`;
+  return `https://wa.me/${number}?text=${encoded}`;
 }
 
-export function buildBookingWhatsAppLink(booking) {
+export function buildBookingWhatsAppLink(number, booking) {
   const lines = [
     `New request: ${booking.service}`,
     `Name: ${booking.name}`,
@@ -19,5 +23,5 @@ export function buildBookingWhatsAppLink(booking) {
     `Prefers: ${booking.contactPreference}`,
     booking.notes ? `Notes: ${booking.notes}` : null,
   ].filter(Boolean);
-  return buildWhatsAppLink(lines.join("\n"));
+  return buildWhatsAppLink(number, lines.join("\n"));
 }

@@ -124,3 +124,25 @@ create policy "authenticated can delete reviews"
   on reviews for delete
   to authenticated
   using (true);
+
+-- Site settings: simple key/value store so the owner can change things like
+-- the WhatsApp/Telegram number from /admin, no code change or redeploy needed.
+create table if not exists site_settings (
+  key text primary key,
+  value text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table site_settings enable row level security;
+
+-- Public needs to read these to build wa.me/t.me links on the live site.
+create policy "public can read site settings"
+  on site_settings for select
+  to public
+  using (true);
+
+create policy "authenticated can manage site settings"
+  on site_settings for all
+  to authenticated
+  using (true)
+  with check (true);
